@@ -192,7 +192,12 @@ python tools/verify_data.py
 | Drag | orbit the current shell |
 | Click a rung | jump to that scale |
 | Arrow up / down | step one level |
+| Pinch (touch) | move up and down the scale ladder |
 | Search | find a star, galaxy, cluster or level by name or by meaning |
+
+Phones and tablets work: pinch or tap a rung to change scale, one finger to look
+around. The on-device chat is the exception — it needs WebGPU and about 2 GB of
+memory, so mobile browsers get an explanatory message instead of a broken panel.
 
 ## Viewing it locally
 

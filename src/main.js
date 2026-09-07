@@ -47,7 +47,8 @@ renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 controls.dampingFactor = 0.07;
-controls.enableZoom = false;   // the wheel drives the scale ladder instead
+controls.enableZoom = false;   // the wheel and pinch drive the scale ladder instead
+controls.enablePan = false;     // frees the two-finger gesture for the ladder
 controls.minDistance = UNIT * 0.4;
 controls.maxDistance = UNIT * 4;
 controls.autoRotate = true;
@@ -127,6 +128,44 @@ addEventListener('wheel', (e) => {
   targetPos = Math.max(0, Math.min(LEVELS.length - 1, targetPos + step));
   hideHint();
 }, { passive: true });
+
+// Touch has no wheel, so the pinch gesture drives the ladder instead. Ratio
+// rather than pixel delta, so it behaves the same on any screen density.
+const touches = new Map();
+let pinchStart = 0, pinchFrom = 0;
+
+function pinchSpan() {
+  const [a, b] = [...touches.values()];
+  return Math.hypot(a.x - b.x, a.y - b.y);
+}
+
+canvas.addEventListener('pointerdown', (e) => {
+  if (e.pointerType !== 'touch') return;
+  touches.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (touches.size === 2) { pinchStart = pinchSpan(); pinchFrom = targetPos; }
+});
+
+canvas.addEventListener('pointermove', (e) => {
+  if (e.pointerType !== 'touch' || !touches.has(e.pointerId)) return;
+  touches.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (touches.size !== 2 || !pinchStart) return;
+  // Spreading fingers means zooming in, which is descending the ladder.
+  const zoom = Math.log2(pinchSpan() / pinchStart);
+  targetPos = Math.max(0, Math.min(LEVELS.length - 1, pinchFrom - zoom * 2.2));
+  hideHint();
+});
+
+function endTouch(e) {
+  if (e.pointerType !== 'touch') return;
+  touches.delete(e.pointerId);
+  if (touches.size < 2) pinchStart = 0;
+}
+canvas.addEventListener('pointerup', endTouch);
+canvas.addEventListener('pointercancel', endTouch);
+
+if (matchMedia('(hover: none)').matches) {
+  zoomHint.innerHTML = 'pinch to change scale \u2014 or tap the ladder, drag to look around';
+}
 
 addEventListener('keydown', (e) => {
   if (document.activeElement && document.activeElement.tagName === 'INPUT') return;
