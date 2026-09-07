@@ -31,6 +31,25 @@ model, not a footnote** — see `src/levels.js`:
 Each tier renders in its own colour and its own visual language. You can tell
 what kind of claim you are looking at without reading anything.
 
+## Screenshots
+
+Level 4 — the Orion Arm, 60,000 real catalogued stars. The field looks
+spherical because the sample is magnitude-limited: this is our detection
+horizon, not the arm's true shape, and the panel says so.
+
+![Orion Arm](docs/orion-arm.png)
+
+Level 7 — Laniakea. Real large-scale structure from measured distances: the
+Virgo concentration in gold at centre, filaments radiating outward.
+
+![Laniakea Supercluster](docs/laniakea.png)
+
+Level 9 — the Multiverse, drawn in a deliberately different visual language.
+Wireframe and violet, with our own universe in cyan. You can tell at a glance
+that the ground has changed from observation to proposal.
+
+![Multiverse](docs/multiverse.png)
+
 ## The ten shells
 
 | # | Level | Extent | Evidence | Objects drawn |
@@ -175,13 +194,13 @@ python tools/verify_data.py
 | Arrow up / down | step one level |
 | Search | find a star, galaxy, cluster or level by name or by meaning |
 
-## Running locally
+## Viewing it locally
 
-Any static server; ES modules need a real origin.
+Double-click **`run.cmd`** on Windows, or **`./run.sh`** elsewhere. Both start a
+server on port 8080 and open a browser.
 
-```bash
-python -m http.server 8000
-```
+Opening `index.html` straight from disk will not work: ES modules and `fetch`
+both require a real origin.
 
 ## Licence
 
