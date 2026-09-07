@@ -92,9 +92,9 @@ export const LEVELS = [
     summary:
       'Our stretch of one spiral arm, out to 1,000 parsecs. This is roughly where parallax measurement stops being trustworthy, so it is also the edge of what we can honestly plot star by star.',
     facts: [
-      '60,000 catalogued stars plotted here',
       'Deneb, at 433 pc, is near the far edge',
       'Beyond this, individual distances carry large errors',
+      'The field looks spherical because the sample is magnitude-limited: we can see bright stars in every direction, so this is our detection horizon rather than the arm true shape',
     ],
     source: 'HYG v4.1',
   },
@@ -115,19 +115,21 @@ export const LEVELS = [
     source: 'Modelled from published structural parameters',
   },
   {
-    id: 'local-group',
-    name: 'Local Group',
-    scaleLabel: '1 megaparsec',
-    logSpan: 22.5,
+    id: 'local-volume',
+    name: 'Local Volume',
+    scaleLabel: '5 megaparsecs',
+    logSpan: 23.2,
     evidence: 'measured',
     summary:
-      'About 80 galaxies bound by gravity, dominated by Andromeda and the Milky Way. Andromeda is approaching us at 110 km/s and will merge with our galaxy in roughly 4.5 billion years.',
+      'Our own Local Group plus its nearest neighbours, every one at a measured distance. Andromeda dominates the inner region and is approaching us at 110 km/s; it will merge with the Milky Way in roughly 4.5 billion years.',
     facts: [
-      'Andromeda (M31): 0.78 Mpc',
-      'Large Magellanic Cloud: 0.050 Mpc',
-      'Triangulum (M33): 0.85 Mpc',
+      'Andromeda (M31): 0.77 Mpc',
+      'Large Magellanic Cloud: 0.05 Mpc',
+      'Triangulum (M33): 0.91 Mpc',
+      'Centaurus A: 3.66 Mpc',
+      'Southern Pinwheel (M83): 4.66 Mpc',
     ],
-    source: 'Published distance measurements, per galaxy',
+    source: 'Cosmicflows-3 individual distance measurements',
   },
   {
     id: 'laniakea',

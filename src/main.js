@@ -55,7 +55,7 @@ controls.autoRotateSpeed = 0.22;
 
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
-const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.72, 0.65, 0.2);
+const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.5, 0.55, 0.32);
 composer.addPass(bloom);
 
 scene.add(new THREE.AmbientLight(0x33507a, 0.5));
@@ -79,7 +79,7 @@ function buildShell(i) {
     case 'neighbourhood':  built = buildStars(25, UNIT, { magCuts: [4.0, 8.0] }); break;
     case 'orion-arm':      built = buildStars(1000, UNIT, { magCuts: [2.5, 5.5] }); break;
     case 'milky-way':      built = createMilkyWay(UNIT); break;
-    case 'local-group':    built = buildGalaxies(1.5, UNIT, { size: 7.5 }); break;
+    case 'local-volume':   built = buildGalaxies(5, UNIT, { size: 6.4 }); break;
     case 'laniakea':       built = buildGalaxies(80, UNIT, { size: 4.6 }); break;
     case 'observable-universe': built = buildGalaxies(520, UNIT, { size: 3.2, opacity: 0.8 }); break;
     case 'multiverse':     built = createMultiverse(UNIT); break;
@@ -190,7 +190,7 @@ function showLevelInfo(i) {
     const s = shells[i];
     if (s) facts.push(s.plotted.toLocaleString() + ' catalogued stars drawn at this level');
   }
-  if (level.id === 'local-group' || level.id === 'laniakea' || level.id === 'observable-universe') {
+  if (level.id === 'local-volume' || level.id === 'laniakea' || level.id === 'observable-universe') {
     const s = shells[i];
     if (s) facts.push(s.plotted.toLocaleString() + ' catalogued galaxies drawn at this level');
   }
@@ -275,7 +275,7 @@ closeInfo.addEventListener('click', () => infoPanel.classList.add('hidden'));
 let searchIndex = [];
 
 function levelForStarPc(pc) { return pc <= 25 ? 2 : 3; }
-function levelForGalaxyMpc(mpc) { return mpc <= 1.5 ? 5 : mpc <= 80 ? 6 : 7; }
+function levelForGalaxyMpc(mpc) { return mpc <= 5 ? 5 : mpc <= 80 ? 6 : 7; }
 
 function buildSearchIndex() {
   const sm = starMeta(), gm = galaxyMeta();
