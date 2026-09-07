@@ -1,35 +1,48 @@
 /* Mobile-safe interaction bridge for Cosmic Explorer. */
 (() => {
-  const bind = () => {
-    const button = document.getElementById('cxLaunch');
+  let fired = false;
+
+  const enter = (event) => {
+    const target = event?.target?.closest?.('#cxLaunch');
+    const button = target || document.getElementById('cxLaunch');
     const hero = document.getElementById('cosmicExplorer');
-    const instrument = document.getElementById('cxInstrument');
-    const timeline = document.getElementById('cxTimeline');
-    if (!button || !hero) return false;
+    if (!button || !hero || hero.classList.contains('cx-dismiss')) return;
 
-    if (button.dataset.mobileBound === '1') return true;
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation?.();
+    }
+
+    if (fired) return;
+    fired = true;
+
+    hero.classList.add('cx-dismiss');
+    document.getElementById('cxInstrument')?.classList.add('open');
+    document.getElementById('cxTimeline')?.classList.add('show');
+    window.scrollTo?.(0, 0);
+    setTimeout(() => hero.remove(), 700);
+  };
+
+  // Capture phase makes this work even if another layer/listener intercepts the tap.
+  document.addEventListener('pointerup', (e) => {
+    if (e.pointerType === 'touch' || e.pointerType === 'pen') enter(e);
+  }, true);
+
+  document.addEventListener('touchend', enter, { passive: false, capture: true });
+
+  const bindButton = () => {
+    const button = document.getElementById('cxLaunch');
+    if (!button || button.dataset.mobileBound === '1') return false;
     button.dataset.mobileBound = '1';
-
-    const enter = (event) => {
-      if (event) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
-      hero.classList.add('cx-dismiss');
-      instrument?.classList.add('open');
-      timeline?.classList.add('show');
-      window.scrollTo?.(0, 0);
-      setTimeout(() => hero.remove(), 700);
-    };
-
-    button.addEventListener('touchend', enter, { passive: false });
-    button.addEventListener('click', enter, { passive: false });
+    button.style.touchAction = 'manipulation';
+    button.addEventListener('click', enter, { capture: true });
     return true;
   };
 
-  if (!bind()) {
+  if (!bindButton()) {
     const observer = new MutationObserver(() => {
-      if (bind()) observer.disconnect();
+      if (bindButton()) observer.disconnect();
     });
     observer.observe(document.documentElement, { childList: true, subtree: true });
   }
