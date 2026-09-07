@@ -1,6 +1,6 @@
 /* COSMIC EXPLORER — premium navigation/observatory layer */
 #cosmicDock{position:fixed;right:18px;bottom:18px;z-index:40;display:flex;gap:6px;padding:7px;border:1px solid rgba(150,190,255,.18);border-radius:16px;background:rgba(2,7,18,.68);backdrop-filter:blur(18px);box-shadow:0 14px 60px rgba(0,0,0,.35)}
-.cx-mode{border:0;background:transparent;color:rgba(225,235,255,.58);padding:9px 11px;border-radius:10px;font:600 10px/1 inherit;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:.25s}
+.cx-mode{border:0;background:transparent;color:rgba(225,235,255,.58);padding:9px 11px;border-radius:10px;font:600 10px/1 system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:.25s}
 .cx-mode:hover,.cx-mode.active{color:#fff;background:rgba(126,231,255,.11);box-shadow:inset 0 0 0 1px rgba(126,231,255,.14),0 0 24px rgba(126,231,255,.08)}
 #cosmicTelemetry{position:fixed;right:18px;top:88px;z-index:32;width:min(310px,calc(100vw - 36px));padding:14px 15px;border:1px solid rgba(150,190,255,.16);border-radius:18px;background:linear-gradient(145deg,rgba(3,10,25,.78),rgba(3,6,16,.54));backdrop-filter:blur(18px);opacity:0;transform:translateY(-8px);pointer-events:none;transition:.35s}
 #cosmicTelemetry.open{opacity:1;transform:none;pointer-events:auto}
