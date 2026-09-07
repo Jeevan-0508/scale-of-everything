@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Scale of Everything — from one planet to the edge of the map</title>
+<meta name="description" content="Zoom from Earth to the edge of the observable universe through ten scale shells, built from real astronomical catalogues, with an in-browser AI that answers from the data." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='6' fill='%2338bdf8'/><circle cx='16' cy='16' r='13' fill='none' stroke='%23a78bfa' stroke-width='1.5'/></svg>" />
+<link rel="stylesheet" href="style.css" />
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://esm.sh/three@0.160.0",
+    "three/addons/": "https://esm.sh/three@0.160.0/examples/jsm/",
+    "@huggingface/transformers": "https://esm.sh/@huggingface/transformers@4.2.0",
+    "@mlc-ai/web-llm": "https://cdn.jsdelivr.net/npm/@mlc-ai/web-llm@0.2.84/+esm"
+  }
+}
+</script>
+</head>
+<body>
+<canvas id="scene"></canvas>
+
+<div id="loadOverlay">
+  <div class="load-box">
+    <h1>Scale of Everything</h1>
+    <p id="loadLabel">reading the catalogues…</p>
+    <div class="load-bar"><div id="loadFill"></div></div>
+  </div>
+</div>
+
+<header id="hud">
+  <div class="brand">
+    <span class="brand-mark"></span>
+    <div>
+      <div class="brand-name">Scale of Everything</div>
+      <div class="brand-sub">ten shells, from 6,371 km to the edge of the map</div>
+    </div>
+  </div>
+  <div class="hud-actions">
+    <input id="searchInput" type="search" placeholder="Find a star, galaxy or cluster…" autocomplete="off" />
+    <button id="chatToggle" type="button">Ask the universe</button>
+  </div>
+</header>
+
+<nav id="ladder" aria-label="scale levels"></nav>
+
+<div id="readout">
+  <div id="readoutName">Earth</div>
+  <div id="readoutScale">6,371 km</div>
+  <div id="readoutEvidence"><span class="pill"></span><span class="pill-label"></span></div>
+</div>
+
+<div id="zoomHint">scroll, or drag the ladder — <kbd>&uarr;</kbd><kbd>&darr;</kbd> also work</div>
+
+<section id="infoPanel" class="hidden">
+  <button id="closeInfo" type="button" aria-label="close">&times;</button>
+  <div id="infoKind"></div>
+  <h2 id="infoTitle"></h2>
+  <p id="infoBody"></p>
+  <ul id="infoFacts"></ul>
+  <div id="infoSource"></div>
+</section>
+
+<section id="chatPanel" class="hidden">
+  <header id="chatHeader">
+    <span>Ask the universe</span>
+    <button id="chatClose" type="button" aria-label="close chat">&times;</button>
+  </header>
+  <div id="chatMessages"></div>
+  <div id="chatStatus"></div>
+  <form id="chatForm">
+    <input id="chatInput" type="text" placeholder="Ask about anything on this ladder…" autocomplete="off" disabled />
+    <button id="chatSend" type="submit" disabled>Send</button>
+  </form>
+</section>
+
+<div id="searchStatus"></div>
+
+<script type="module" src="src/main.js"></script>
+</body>
+</html>
