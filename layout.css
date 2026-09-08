@@ -1,0 +1,77 @@
+/* Cross-layer geometry.
+   Four scripts each add their own fixed panels (main.js, experience.js,
+   cosmicExplorer.js, the observatory) and none of them can see the others, so
+   every position that has to agree between layers is owned here instead of
+   being guessed four times. */
+
+:root {
+  --dock-h: 3.1rem;   /* height of #cosmicDock, which the bottom stack sits on */
+}
+
+/* ---------- bottom centre, stacked upwards off the dock ---------- */
+#cosmicDock { bottom: 1rem; }
+#zoomHint   { bottom: calc(1rem + var(--dock-h)); }
+#readout    { bottom: calc(2.2rem + var(--dock-h)); }
+#cxTimeline { bottom: calc(9rem + var(--dock-h)); }
+
+/* ---------- right column: one slot, one panel at a time ----------
+   src/panels.js enforces the exclusivity; this only has to place the slot.
+
+   Sheets are opaque and carry the reading matter, so they claim a band above
+   the scene HUD (readout 20, timeline 31): otherwise HUD text paints straight
+   through the panel body wherever the boxes happen to touch. */
+#cxInstrument                  { z-index: 35; }
+#infoPanel                     { z-index: 36; }
+#chatPanel                     { z-index: 37; }
+#observatory.observatory-panel { z-index: 38; }
+#cxInstrument { top: 5.2rem; bottom: auto; }
+#infoPanel {
+  top: 5.2rem; bottom: auto; transform: none;
+  max-height: calc(100vh - 8rem - var(--dock-h));
+}
+#infoPanel.hidden { transform: translateX(14px); }
+#chatPanel {
+  top: 5.2rem; bottom: auto;
+  height: min(480px, calc(100vh - 8rem - var(--dock-h)));
+}
+
+@media (max-width: 760px) {
+  :root { --dock-h: 2.9rem; }
+
+  /* The dock spans the full width here, so the Deep Dive button cannot stay in
+     the bottom-right corner: it lands inside the dock. Hint and button share
+     the row just above it instead, one on each side. */
+  #cosmicDock { bottom: .6rem; }
+  #observatoryToggle.obs-toggle { bottom: calc(1rem + var(--dock-h)); right: .5rem; }
+  #zoomHint {
+    left: .6rem; right: auto; transform: none; text-align: left;
+    max-width: calc(100vw - 8.5rem);
+    bottom: calc(1rem + var(--dock-h));
+  }
+  #readout    { bottom: calc(3.8rem + var(--dock-h)); }
+  #cxTimeline { bottom: calc(11rem + var(--dock-h)); }
+
+  /* Sheets rise off the dock and keep clear of the ladder column, which is
+     otherwise covered and untappable. */
+  #cxInstrument, #infoPanel, #chatPanel {
+    top: auto; bottom: calc(1.1rem + var(--dock-h));
+    left: 2.9rem; right: .5rem; width: auto;
+  }
+  #cxInstrument, #infoPanel { max-height: 46vh; }
+  #chatPanel { height: min(420px, 52vh); }
+
+  /* Only on a phone is the readout genuinely in the way: a sheet covers it,
+     so it steps aside instead of showing through from underneath. */
+  /* #cxTimeline sits at z-index 31, above the observatory panel at 30, so on a
+     narrow screen its text bleeds straight through the panel body. Everything
+     that belongs to the scene HUD steps aside while a sheet is up. */
+  body.sheet-open #readout,
+  body.sheet-open #zoomHint,
+  body.sheet-open #cxTimeline,
+  body.sheet-open #observatoryToggle.obs-toggle { opacity: 0; pointer-events: none; transition: opacity .25s ease; }
+
+  #observatory.observatory-panel {
+    top: 4.6rem;
+    height: calc(100vh - 6rem - var(--dock-h));
+  }
+}

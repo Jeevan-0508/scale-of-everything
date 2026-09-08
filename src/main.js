@@ -497,7 +497,8 @@ async function boot() {
     mod.buildIndex(searchIndex, (frac) => {
       searchInput.placeholder = 'waking up the AI… ' + Math.round(frac * 100) + '%';
     }).then(() => {
-      searchInput.placeholder = 'Ask in plain words… (AI-powered)';
+      // The field is only ~210px wide on a phone, so the long form clips.
+      searchInput.placeholder = innerWidth <= 760 ? 'Ask in plain words…' : 'Ask in plain words… (AI-powered)';
       semantic = mod;
     }).catch((err) => {
       searchInput.placeholder = 'Find a star, galaxy or cluster…';

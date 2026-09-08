@@ -114,7 +114,8 @@ function lightCrossing(level) {
   if (seconds < 3600) return `${(seconds / 60).toFixed(1)} min`;
   if (seconds < 86400) return `${(seconds / 3600).toFixed(1)} h`;
   if (seconds < 31557600) return `${(seconds / 86400).toFixed(1)} days`;
-  return `${(seconds / 31557600).toFixed(1)} years`;
+  // Three decimals on a sixteen-million-year figure is noise, not precision.
+  return `${Math.round(seconds / 31557600).toLocaleString('en-US')} years`;
 }
 
 function countForLevel(level, index, soe) {
