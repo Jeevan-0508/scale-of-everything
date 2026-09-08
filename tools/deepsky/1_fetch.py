@@ -50,7 +50,7 @@ for key,title in PICK.items():
     raw=urllib.request.urlopen(urllib.request.Request(m["thumb"],headers=UA),timeout=180).read()
     im=Image.open(io.BytesIO(raw)).convert("RGB")
     im.thumbnail((760,760), Image.LANCZOS)
-    p=fHERE + "/out/{key}.webp"; im.save(p,"WEBP",quality=78,method=6)
+    p=HERE + "/out/" + key + ".webp"; im.save(p,"WEBP",quality=78,method=6)
     manifest[key]={"file":f"{key}.webp","w":im.width,"h":im.height,"bytes":os.path.getsize(p),
                    "commons":title,"page":m["page"],"lic":m["lic"],"licurl":m["licurl"],
                    "artist":m["artist"][:200],"credit":m["credit"][:200]}

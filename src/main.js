@@ -8,9 +8,12 @@ import { LEVELS, EVIDENCE } from './levels.js';
 import { loadCatalogs, buildStars, buildGalaxies, starMeta, galaxyMeta } from './catalog.js';
 import { loadDeepSky, attachDeepSky, deepSkyObjects, deepSkyFacts } from './deepsky.js';
 import {
-  createBackdrop, createEarth, createSolarSystem, createMilkyWay,
-  createMultiverse, createOmniverse, PLANETS,
+  createBackdrop, createEarth, createMilkyWay,
+  createMultiverse, createOmniverse,
 } from './stages.js';
+import {
+  loadPlanets, createSolarSystem, planetBodies, planetMeta, planetFacts,
+} from './planets.js';
 
 // Every shell is built to the same radius in scene units. That is the whole
 // trick: the ladder spans 20 orders of magnitude in reality, but the renderer
@@ -244,19 +247,27 @@ function showLevelInfo(i) {
   infoPanel.classList.remove('hidden');
 }
 
-function showPlanetInfo(p) {
-  infoKind.textContent = 'Solar System';
-  infoTitle.textContent = p.name;
-  infoBody.innerHTML = '<span class="ev-tag measured">measured</span><br>' +
-    'Orbits the Sun at ' + p.au + ' AU, completing one circuit every ' +
-    p.days.toLocaleString() + ' days.';
-  setFacts([
-    'Semi-major axis ' + p.au + ' AU',
-    'Equatorial radius ' + p.km.toLocaleString() + ' km',
-    'Orbital period ' + p.days.toLocaleString() + ' days',
-    'Light from the Sun arrives in ' + (p.au * 8.317).toFixed(1) + ' minutes',
-  ]);
-  infoSource.innerHTML = '<strong>Orbital radii on screen are compressed by a power law so Mercury stays visible beside Neptune. Every figure quoted above is the real one.</strong><br>Source: NASA planetary fact sheet';
+function showPlanetInfo(b) {
+  const meta = planetMeta();
+  infoKind.textContent = b.kind.replace(/^./, (c) => c.toUpperCase());
+  infoTitle.textContent = b.name;
+  infoBody.innerHTML =
+    '<span class="ev-tag measured">measured</span>' +
+    '<img class="ds-shot pl" src="' + b.shot.src + '" alt="Spacecraft photograph of ' +
+      b.name + '" loading="lazy">' +
+    '<p>' + b.blurb + '</p>' +
+    '<p class="ds-caveat">' + meta.map_caveat + '</p>';
+  setFacts(planetFacts(b));
+  infoSource.innerHTML =
+    '<strong>On screen the orbital radii, the body radii and the clock are all compressed, ' +
+    'which keeps every ratio between bodies real while fitting them on one display. ' +
+    'Every figure quoted above is the uncompressed one.</strong><br>' +
+    'Figures: ' + meta.source + '<br>' +
+    'Photograph: ' + b.shot.credit + ' &mdash; <a href="' + b.shot.page +
+      '" target="_blank" rel="noopener">' + b.shot.licence + '</a><br>' +
+    b.map_role.replace(/^./, (c) => c.toUpperCase()) + ': ' + b.map.credit +
+      ' &mdash; <a href="' + b.map.page + '" target="_blank" rel="noopener">' +
+      b.map.licence + '</a>';
   infoPanel.classList.remove('hidden');
 }
 
@@ -368,6 +379,16 @@ function buildSearchIndex() {
              c.members + ' member galaxies of measured distance.',
     });
   });
+  planetBodies().forEach((b) => {
+    const bits = [b.name];
+    if (b.kind === 'dwarf planet') bits.push('dwarf planet');
+    searchIndex.push({
+      kind: 'planet', label: b.name, aliases: bits,
+      level: 1, row: null, payload: b,
+      blurb: b.name + ' is a ' + b.kind + ' with an equatorial radius of ' +
+             b.radius_km.toLocaleString() + ' km. ' + b.blurb,
+    });
+  });
   deepSkyObjects().forEach((o) => {
     searchIndex.push({
       kind: 'deepsky', label: o.name,
@@ -413,6 +434,7 @@ function focusEntry(entry) {
   else if (entry.kind === 'galaxy') showGalaxyInfo(entry.payload);
   else if (entry.kind === 'cluster') showClusterInfo(entry.payload);
   else if (entry.kind === 'deepsky') showDeepSkyInfo(entry.payload);
+  else if (entry.kind === 'planet') showPlanetInfo(entry.payload);
   else showLevelInfo(entry.level);
 
   if (entry.kind === 'deepsky') {
@@ -498,7 +520,9 @@ function pickHover() {
     hovered = obj;
     if (hovered) emphasise(hovered, 1.45);
     canvas.style.cursor = hovered ? 'pointer' : 'default';
-    if (hovered && hovered.userData.kind === 'deepsky') showLabel(hovered.userData.obj.name);
+    const d = hovered && hovered.userData;
+    if (d && d.kind === 'deepsky') showLabel(d.obj.name);
+    else if (d && d.kind === 'planet') showLabel(d.body.name);
     else hideLabel();
   }
   if (hovered && labelEl.classList.contains('show')) placeLabel(hovered);
@@ -509,8 +533,11 @@ function pickHover() {
 const labelEl = document.getElementById('hoverLabel');
 function showLabel(text) { labelEl.textContent = text; labelEl.classList.add('show'); }
 function hideLabel() { labelEl.classList.remove('show'); }
+const labelPos = new THREE.Vector3();
 function placeLabel(obj) {
-  const v = obj.position.clone().project(camera);
+  // Planets sit inside an orbit node and a tilt node, so their own position is
+  // local to the parent and the label has to use the world position.
+  const v = obj.getWorldPosition(labelPos).project(camera);
   labelEl.style.left = ((v.x * 0.5 + 0.5) * innerWidth) + 'px';
   labelEl.style.top = ((-v.y * 0.5 + 0.5) * innerHeight) + 'px';
 }
@@ -518,7 +545,7 @@ function placeLabel(obj) {
 canvas.addEventListener('click', () => {
   if (!hovered) return;
   const d = hovered.userData;
-  if (d.kind === 'planet') showPlanetInfo(d.planet);
+  if (d.kind === 'planet') showPlanetInfo(d.body);
   else if (d.kind === 'deepsky') {
     showDeepSkyInfo(d.obj);
     pendingTarget = hovered.position.clone();
@@ -546,8 +573,11 @@ async function boot() {
   setLoad(12, 'reading the catalogues…');
   await loadCatalogs((frac, label) => setLoad(12 + frac * 55, label));
 
-  setLoad(70, 'reading the deep-sky pack…');
+  setLoad(68, 'reading the deep-sky pack…');
   await loadDeepSky();
+
+  setLoad(73, 'reading the Solar System pack…');
+  await loadPlanets();
 
   setLoad(76, 'building the first shells…');
   shellAt(0); shellAt(1);
@@ -566,6 +596,7 @@ async function boot() {
   window.SOE = {
     scene, camera, controls, LEVELS, shells, searchIndex,
     starMeta: starMeta(), galaxyMeta: galaxyMeta(), deepSky: deepSkyObjects(),
+    planets: planetBodies(), planetMeta: planetMeta(),
     goTo, runSearch, get pos() { return pos; }, get targetPos() { return targetPos; },
     shellAt,
   };
@@ -649,7 +680,7 @@ function animate() {
 }
 animate();
 
-export { LEVELS, PLANETS };
+export { LEVELS, planetBodies };
 
 // ------------------------------------------------- chat: grounded conversation
 

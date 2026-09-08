@@ -1,0 +1,362 @@
+{
+ "generated_by": "tools/planets/",
+ "source": "NASA planetary fact sheets, nssdc.gsfc.nasa.gov/planetary/factsheet",
+ "evidence": "measured",
+ "map_caveat": "Surface maps are photographic mosaics reprojected onto a rectangle, assembled from many frames taken at different times, angles and resolutions. They are derived from real observations but they are not single photographs, which is why the single photograph is shown beside each one.",
+ "note": "Orbital radii and body radii are compressed for display; every figure quoted in the panel is the real one.",
+ "count": 11,
+ "bodies": [
+  {
+   "id": "sun",
+   "name": "Sun",
+   "kind": "star",
+   "radius_km": 695700.0,
+   "rot_hours": 609.12,
+   "tilt_deg": 7.25,
+   "blurb": "One star, holding 99.86 per cent of the mass of everything else on this level combined.",
+   "map_role": "photosphere map",
+   "map": {
+    "src": "assets/planets/map-sun.webp",
+    "w": 1024,
+    "h": 512,
+    "credit": "Solar System Scope",
+    "licence": "CC BY 4.0",
+    "licence_url": "https://creativecommons.org/licenses/by/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_sun.jpg"
+   },
+   "shot": {
+    "src": "assets/planets/shot-sun.webp",
+    "w": 640,
+    "h": 640,
+    "credit": "Matúš Motlo",
+    "licence": "CC BY-SA 4.0",
+    "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:The_Sun_in_white_light.jpg"
+   }
+  },
+  {
+   "id": "mercury",
+   "name": "Mercury",
+   "kind": "planet",
+   "radius_km": 2439.7,
+   "rot_hours": 1407.6,
+   "tilt_deg": 0.034,
+   "blurb": "No atmosphere to move heat around, so the same body runs 430 C in daylight and -180 C at night.",
+   "map_role": "surface map",
+   "map": {
+    "src": "assets/planets/map-mercury.webp",
+    "w": 1024,
+    "h": 512,
+    "credit": "Solar System Scope",
+    "licence": "CC BY 4.0",
+    "licence_url": "https://creativecommons.org/licenses/by/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_mercury.jpg"
+   },
+   "shot": {
+    "src": "assets/planets/shot-mercury.webp",
+    "w": 640,
+    "h": 640,
+    "credit": "NASA/Johns Hopkins University Applied Physics Laboratory/Arizona State University/Carnegie Institution of Washington",
+    "licence": "Public domain",
+    "licence_url": "",
+    "page": "https://commons.wikimedia.org/wiki/File:Mercury_in_true_color.jpg"
+   },
+   "parent": "Sun",
+   "au": 0.387,
+   "orbit_days": 87.97
+  },
+  {
+   "id": "venus",
+   "name": "Venus",
+   "kind": "planet",
+   "radius_km": 6051.8,
+   "rot_hours": -5832.5,
+   "tilt_deg": 177.36,
+   "blurb": "The surface map is hidden under permanent cloud; what you see here is the cloud deck, not the ground.",
+   "map_role": "cloud-top map",
+   "map": {
+    "src": "assets/planets/map-venus.webp",
+    "w": 1024,
+    "h": 512,
+    "credit": "Solar System Scope",
+    "licence": "CC BY 4.0",
+    "licence_url": "https://creativecommons.org/licenses/by/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_venus_atmosphere.jpg"
+   },
+   "shot": {
+    "src": "assets/planets/shot-venus.webp",
+    "w": 640,
+    "h": 640,
+    "credit": "NASA/JPL-Caltech",
+    "licence": "Public domain",
+    "licence_url": "",
+    "page": "https://commons.wikimedia.org/wiki/File:Venus_from_Mariner_10.jpg"
+   },
+   "parent": "Sun",
+   "au": 0.723,
+   "orbit_days": 224.7
+  },
+  {
+   "id": "earth",
+   "name": "Earth",
+   "kind": "planet",
+   "radius_km": 6371.0,
+   "rot_hours": 23.9345,
+   "tilt_deg": 23.44,
+   "blurb": "The only one of these where the surface, the ocean and the air have been measured from the inside.",
+   "map_role": "surface map",
+   "map": {
+    "src": "assets/planets/map-earth.webp",
+    "w": 1024,
+    "h": 512,
+    "credit": "Solar System Scope",
+    "licence": "CC BY 4.0",
+    "licence_url": "https://creativecommons.org/licenses/by/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_earth_daymap.jpg"
+   },
+   "shot": {
+    "src": "assets/planets/shot-earth.webp",
+    "w": 639,
+    "h": 640,
+    "credit": "NASA/Apollo 17 crew; taken by either Harrison Schmitt or Ron Evans",
+    "licence": "Public domain",
+    "licence_url": "",
+    "page": "https://commons.wikimedia.org/wiki/File:The_Earth_seen_from_Apollo_17.jpg"
+   },
+   "parent": "Sun",
+   "au": 1.0,
+   "orbit_days": 365.26
+  },
+  {
+   "id": "moon",
+   "name": "Moon",
+   "kind": "natural satellite",
+   "radius_km": 1737.4,
+   "rot_hours": 655.728,
+   "tilt_deg": 6.68,
+   "blurb": "Locked so that the same hemisphere always faces Earth. Its rotation period and its orbital period are the same number.",
+   "map_role": "surface map",
+   "map": {
+    "src": "assets/planets/map-moon.webp",
+    "w": 1024,
+    "h": 512,
+    "credit": "Solar System Scope",
+    "licence": "CC BY 4.0",
+    "licence_url": "https://creativecommons.org/licenses/by/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_moon.jpg"
+   },
+   "shot": {
+    "src": "assets/planets/shot-moon.webp",
+    "w": 640,
+    "h": 608,
+    "credit": "Gregory H. Revera",
+    "licence": "CC BY-SA 3.0",
+    "licence_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "page": "https://commons.wikimedia.org/wiki/File:FullMoon2010.jpg"
+   },
+   "parent": "Earth",
+   "orbit_km_from_earth": 384400.0,
+   "orbit_days": 27.3217
+  },
+  {
+   "id": "mars",
+   "name": "Mars",
+   "kind": "planet",
+   "radius_km": 3389.5,
+   "rot_hours": 24.6229,
+   "tilt_deg": 25.19,
+   "blurb": "Two thirds the diameter of Earth, with the tallest volcano and the deepest canyon in the Solar System.",
+   "map_role": "surface map",
+   "map": {
+    "src": "assets/planets/map-mars.webp",
+    "w": 1024,
+    "h": 512,
+    "credit": "Solar System Scope",
+    "licence": "CC BY 4.0",
+    "licence_url": "https://creativecommons.org/licenses/by/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_mars.jpg"
+   },
+   "shot": {
+    "src": "assets/planets/shot-mars.webp",
+    "w": 640,
+    "h": 640,
+    "credit": "ESA & MPS for OSIRIS Team MPS/UPD/LAM/IAA/RSSD/INTA/UPM/DASP/IDA, CC BY-SA 3.0 IGO",
+    "licence": "CC BY-SA 3.0 igo",
+    "licence_url": "https://creativecommons.org/licenses/by-sa/3.0/igo/deed.en",
+    "page": "https://commons.wikimedia.org/wiki/File:OSIRIS_Mars_true_color.jpg"
+   },
+   "parent": "Sun",
+   "au": 1.524,
+   "orbit_days": 686.98
+  },
+  {
+   "id": "jupiter",
+   "name": "Jupiter",
+   "kind": "planet",
+   "radius_km": 69911.0,
+   "rot_hours": 9.925,
+   "tilt_deg": 3.13,
+   "blurb": "More massive than every other planet put together. The banding is weather, and it moves.",
+   "map_role": "cloud-top map",
+   "map": {
+    "src": "assets/planets/map-jupiter.webp",
+    "w": 1024,
+    "h": 512,
+    "credit": "Solar System Scope",
+    "licence": "CC BY 4.0",
+    "licence_url": "https://creativecommons.org/licenses/by/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_jupiter.jpg"
+   },
+   "shot": {
+    "src": "assets/planets/shot-jupiter.webp",
+    "w": 640,
+    "h": 640,
+    "credit": "NASA, ESA, and A. Simon (Goddard Space Flight Center)",
+    "licence": "Public domain",
+    "licence_url": "",
+    "page": "https://commons.wikimedia.org/wiki/File:Jupiter_and_its_shrunken_Great_Red_Spot.jpg"
+   },
+   "parent": "Sun",
+   "au": 5.203,
+   "orbit_days": 4332.59
+  },
+  {
+   "id": "saturn",
+   "name": "Saturn",
+   "kind": "planet",
+   "radius_km": 58232.0,
+   "rot_hours": 10.656,
+   "tilt_deg": 26.73,
+   "blurb": "The rings are ice and rock in orbit, not a solid sheet, and they are thinner relative to their width than a sheet of paper.",
+   "map_role": "cloud-top map",
+   "map": {
+    "src": "assets/planets/map-saturn.webp",
+    "w": 1024,
+    "h": 512,
+    "credit": "Solar System Scope",
+    "licence": "CC BY 4.0",
+    "licence_url": "https://creativecommons.org/licenses/by/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_saturn.jpg"
+   },
+   "shot": {
+    "src": "assets/planets/shot-saturn.webp",
+    "w": 640,
+    "h": 310,
+    "credit": "NASA / JPL / Space Science Institute",
+    "licence": "Public domain",
+    "licence_url": "",
+    "page": "https://commons.wikimedia.org/wiki/File:Saturn_during_Equinox.jpg"
+   },
+   "parent": "Sun",
+   "au": 9.537,
+   "orbit_days": 10759.22,
+   "rings": {
+    "inner_km": 66900.0,
+    "outer_km": 136775.0,
+    "note": "D ring inner edge to A ring outer edge. The Cassini Division and the gaps inside it are carried in the texture's alpha channel, not faked.",
+    "src": "assets/planets/map-saturn-ring.webp",
+    "w": 1024,
+    "h": 32,
+    "credit": "Solar System Scope",
+    "licence": "CC BY 4.0",
+    "licence_url": "https://creativecommons.org/licenses/by/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_saturn_ring_alpha.png",
+    "inner_radii": 1.1489,
+    "outer_radii": 2.3488
+   }
+  },
+  {
+   "id": "uranus",
+   "name": "Uranus",
+   "kind": "planet",
+   "radius_km": 25362.0,
+   "rot_hours": -17.24,
+   "tilt_deg": 97.77,
+   "blurb": "Tipped 98 degrees, so it rolls along its orbit rather than spinning upright.",
+   "map_role": "cloud-top map",
+   "map": {
+    "src": "assets/planets/map-uranus.webp",
+    "w": 1024,
+    "h": 512,
+    "credit": "Solar System Scope",
+    "licence": "CC BY 4.0",
+    "licence_url": "https://creativecommons.org/licenses/by/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_uranus.jpg"
+   },
+   "shot": {
+    "src": "assets/planets/shot-uranus.webp",
+    "w": 640,
+    "h": 640,
+    "credit": "NASA/JPL-Caltech",
+    "licence": "Public domain",
+    "licence_url": "",
+    "page": "https://commons.wikimedia.org/wiki/File:Uranus2.jpg"
+   },
+   "parent": "Sun",
+   "au": 19.191,
+   "orbit_days": 30685.4
+  },
+  {
+   "id": "neptune",
+   "name": "Neptune",
+   "kind": "planet",
+   "radius_km": 24622.0,
+   "rot_hours": 16.11,
+   "tilt_deg": 28.32,
+   "blurb": "Never visited since Voyager 2 in 1989. Every image of it is from that one week.",
+   "map_role": "cloud-top map",
+   "map": {
+    "src": "assets/planets/map-neptune.webp",
+    "w": 1024,
+    "h": 512,
+    "credit": "Solar System Scope",
+    "licence": "CC BY 4.0",
+    "licence_url": "https://creativecommons.org/licenses/by/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_neptune.jpg"
+   },
+   "shot": {
+    "src": "assets/planets/shot-neptune.webp",
+    "w": 640,
+    "h": 640,
+    "credit": "NASA / JPL / Voyager-ISS / Aster Cowart",
+    "licence": "Public domain",
+    "licence_url": "",
+    "page": "https://commons.wikimedia.org/wiki/File:Neptune_-_Voyager_2_(29347980845)_flatten_crop.jpg"
+   },
+   "parent": "Sun",
+   "au": 30.07,
+   "orbit_days": 60189.0
+  },
+  {
+   "id": "pluto",
+   "name": "Pluto",
+   "kind": "dwarf planet",
+   "radius_km": 1188.3,
+   "rot_hours": -153.2928,
+   "tilt_deg": 122.53,
+   "blurb": "Reclassified in 2006, then photographed close up for the first time in 2015. The heart-shaped plain is nitrogen ice.",
+   "map_role": "surface map",
+   "map": {
+    "src": "assets/planets/map-pluto.webp",
+    "w": 1024,
+    "h": 512,
+    "credit": "NASA / Johns Hopkins University Applied Physics Laboratory / Southwest Research Institute",
+    "licence": "Public domain",
+    "licence_url": "",
+    "page": "https://commons.wikimedia.org/wiki/File:Pluto_color_mapmosaic.jpg"
+   },
+   "shot": {
+    "src": "assets/planets/shot-pluto.webp",
+    "w": 640,
+    "h": 640,
+    "credit": "NASA/Johns Hopkins University Applied Physics Laboratory/Southwest Research Institute/Alex Parker",
+    "licence": "Public domain",
+    "licence_url": "",
+    "page": "https://commons.wikimedia.org/wiki/File:Pluto_in_True_Color_-_High-Res.jpg"
+   },
+   "parent": "Sun",
+   "au": 39.482,
+   "orbit_days": 90560.0
+  }
+ ]
+}

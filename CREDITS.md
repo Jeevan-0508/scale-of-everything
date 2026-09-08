@@ -1,11 +1,17 @@
 # Image credits
 
-Every image in `assets/deepsky/` is real observational data released under a free
-licence. None of them are renders. Each was downscaled to 760 px on its long edge,
-converted to WebP, and given a soft elliptical fade in its alpha channel so it does
-not read as a rectangle against the sky. Pixel values were not otherwise altered.
+Every image in this repository is real observational data released under a free
+licence. None of them are renders. This file is generated from the datasets, so it
+cannot drift away from what actually ships.
 
-Regenerate with `python tools/build_deepsky.py`.
+Regenerate with the numbered scripts in `tools/deepsky/` and `tools/planets/`,
+then `python tools/credits.py`.
+
+## Deep sky
+
+Each was downscaled to 760 px on its long edge, converted to WebP, and given a soft
+elliptical fade in its alpha channel so it does not read as a rectangle against the
+sky. Pixel values were not otherwise altered.
 
 | Object | File | Licence | Credit | Source page |
 |---|---|---|---|---|
@@ -28,7 +34,40 @@ Regenerate with `python tools/build_deepsky.py`.
 | Veil Nebula | `NGC6960.webp` | CC BY 4.0 | ESA/Hubble & NASA, Z. Levay | [Commons](https://commons.wikimedia.org/wiki/File:Return_to_the_Veil_Nebula.jpg) |
 | Whirlpool Galaxy | `M51.webp` | Public domain | NASA and European Space Agency | [Commons](https://commons.wikimedia.org/wiki/File:Messier51_sRGB.jpg) |
 
-## Positions and distances
+## Solar System
+
+Surface maps are photographic mosaics reprojected onto a rectangle, assembled from many frames taken at different times, angles and resolutions. They are derived from real observations but they are not single photographs, which is why the single photograph is shown beside each one.
+
+Surface maps were resampled to 1024 x 512 equirectangular WebP; the photographs to
+640 px on their long edge. Figures come from NASA planetary fact sheets, nssdc.gsfc.nasa.gov/planetary/factsheet.
+
+| Body | Image | Role | Licence | Credit | Source page |
+|---|---|---|---|---|---|
+| Sun | `map-sun.webp` | photosphere map | CC BY 4.0 | Solar System Scope | [Commons](https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_sun.jpg) |
+| Sun | `shot-sun.webp` | photograph | CC BY-SA 4.0 | Matúš Motlo | [Commons](https://commons.wikimedia.org/wiki/File:The_Sun_in_white_light.jpg) |
+| Mercury | `map-mercury.webp` | surface map | CC BY 4.0 | Solar System Scope | [Commons](https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_mercury.jpg) |
+| Mercury | `shot-mercury.webp` | photograph | Public domain | NASA/Johns Hopkins University Applied Physics Laboratory/Arizona State University/Carnegie Institution of Washington | [Commons](https://commons.wikimedia.org/wiki/File:Mercury_in_true_color.jpg) |
+| Venus | `map-venus.webp` | cloud-top map | CC BY 4.0 | Solar System Scope | [Commons](https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_venus_atmosphere.jpg) |
+| Venus | `shot-venus.webp` | photograph | Public domain | NASA/JPL-Caltech | [Commons](https://commons.wikimedia.org/wiki/File:Venus_from_Mariner_10.jpg) |
+| Earth | `map-earth.webp` | surface map | CC BY 4.0 | Solar System Scope | [Commons](https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_earth_daymap.jpg) |
+| Earth | `shot-earth.webp` | photograph | Public domain | NASA/Apollo 17 crew; taken by either Harrison Schmitt or Ron Evans | [Commons](https://commons.wikimedia.org/wiki/File:The_Earth_seen_from_Apollo_17.jpg) |
+| Moon | `map-moon.webp` | surface map | CC BY 4.0 | Solar System Scope | [Commons](https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_moon.jpg) |
+| Moon | `shot-moon.webp` | photograph | CC BY-SA 3.0 | Gregory H. Revera | [Commons](https://commons.wikimedia.org/wiki/File:FullMoon2010.jpg) |
+| Mars | `map-mars.webp` | surface map | CC BY 4.0 | Solar System Scope | [Commons](https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_mars.jpg) |
+| Mars | `shot-mars.webp` | photograph | CC BY-SA 3.0 igo | ESA & MPS for OSIRIS Team MPS/UPD/LAM/IAA/RSSD/INTA/UPM/DASP/IDA, CC BY-SA 3.0 IGO | [Commons](https://commons.wikimedia.org/wiki/File:OSIRIS_Mars_true_color.jpg) |
+| Jupiter | `map-jupiter.webp` | cloud-top map | CC BY 4.0 | Solar System Scope | [Commons](https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_jupiter.jpg) |
+| Jupiter | `shot-jupiter.webp` | photograph | Public domain | NASA, ESA, and A. Simon (Goddard Space Flight Center) | [Commons](https://commons.wikimedia.org/wiki/File:Jupiter_and_its_shrunken_Great_Red_Spot.jpg) |
+| Saturn | `map-saturn.webp` | cloud-top map | CC BY 4.0 | Solar System Scope | [Commons](https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_saturn.jpg) |
+| Saturn | `shot-saturn.webp` | photograph | Public domain | NASA / JPL / Space Science Institute | [Commons](https://commons.wikimedia.org/wiki/File:Saturn_during_Equinox.jpg) |
+| Saturn | `map-saturn-ring.webp` | ring strip | CC BY 4.0 | Solar System Scope | [Commons](https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_saturn_ring_alpha.png) |
+| Uranus | `map-uranus.webp` | cloud-top map | CC BY 4.0 | Solar System Scope | [Commons](https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_uranus.jpg) |
+| Uranus | `shot-uranus.webp` | photograph | Public domain | NASA/JPL-Caltech | [Commons](https://commons.wikimedia.org/wiki/File:Uranus2.jpg) |
+| Neptune | `map-neptune.webp` | cloud-top map | CC BY 4.0 | Solar System Scope | [Commons](https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_neptune.jpg) |
+| Neptune | `shot-neptune.webp` | photograph | Public domain | NASA / JPL / Voyager-ISS / Aster Cowart | [Commons](https://commons.wikimedia.org/wiki/File:Neptune_-_Voyager_2_(29347980845)_flatten_crop.jpg) |
+| Pluto | `map-pluto.webp` | surface map | Public domain | NASA / Johns Hopkins University Applied Physics Laboratory / Southwest Research Institute | [Commons](https://commons.wikimedia.org/wiki/File:Pluto_color_mapmosaic.jpg) |
+| Pluto | `shot-pluto.webp` | photograph | Public domain | NASA/Johns Hopkins University Applied Physics Laboratory/Southwest Research Institute/Alex Parker | [Commons](https://commons.wikimedia.org/wiki/File:Pluto_in_True_Color_-_High-Res.jpg) |
+
+## Deep sky: positions and distances
 
 Coordinates: SIMBAD `basic` table, ICRS J2000 (https://simbad.cds.unistra.fr/simbad/sim-tap).
 Angular sizes: SIMBAD `galdim`, arcminutes, omitted where SIMBAD carries no value.

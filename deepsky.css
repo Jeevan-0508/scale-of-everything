@@ -33,6 +33,13 @@
   background-color: #04070e;
 }
 
+.ds-shot.pl {
+  /* A full disc cropped by object-fit: cover loses its limb, and the limb is
+     the part that shows it is a sphere someone photographed. */
+  object-fit: contain;
+  max-height: 220px;
+}
+
 .ds-caveat {
   margin: 0.5rem 0 0;
   padding-left: 0.6rem;
@@ -44,5 +51,6 @@
 
 @media (max-width: 760px) {
   .ds-shot { max-height: 130px; }
+  .ds-shot.pl { max-height: 150px; }
   #hoverLabel { font-size: 0.66rem; }
 }

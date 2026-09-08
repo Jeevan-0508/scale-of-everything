@@ -136,7 +136,7 @@ for key,(ra,dec,otype,maj,minr) in SIM.items():
 
 out.sort(key=lambda r: r["dist_ly"])
 pack = {
-  "generated_by": "tools/build_deepsky.py",
+  "generated_by": "tools/deepsky/",
   "coordinates": "SIMBAD basic table, ICRS J2000, degrees",
   "coordinate_source_url": "https://simbad.cds.unistra.fr/simbad/sim-tap",
   "angular_sizes": "SIMBAD galdim, arcminutes; omitted where SIMBAD has no value",

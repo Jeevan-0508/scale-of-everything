@@ -3,3 +3,7 @@ __pycache__/
 hyg.csv
 cf3.tsv
 tools/deepsky/out/
+tools/planets/out/
+layout-desktop.png
+layout-mobile.png
+ds-*.png

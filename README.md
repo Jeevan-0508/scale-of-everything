@@ -55,7 +55,7 @@ that the ground has changed from observation to proposal.
 | # | Level | Extent | Evidence | Objects drawn |
 | --- | --- | --- | --- | --- |
 | 1 | Earth | 6,371 km | measured | graticule + atmosphere to scale |
-| 2 | Solar System | 30 AU | measured | 8 planets, real orbital elements |
+| 2 | Solar System | 39 AU | measured | Sun, 8 planets, the Moon, Pluto — real surfaces |
 | 3 | Stellar Neighbourhood | 25 pc | measured | real stars, catalogued positions |
 | 4 | Orion Arm | 1,000 pc | measured | 60,000 real stars |
 | 5 | Milky Way | 26.8 kpc | **modelled** | procedural barred spiral |
@@ -107,6 +107,37 @@ temperature is readable off the field.
 **0.35 MB**. Converted to supergalactic cartesian coordinates — the frame
 Laniakea is defined in — so real structure reads as structure instead of
 smearing across an arbitrary axis. 150 clusters with 5 or more members.
+
+### Solar System — 11 real bodies, 0.9 MB
+
+The Sun, all eight planets, the **Moon** and **Pluto**, each wearing the
+equirectangular map that spacecraft mosaics were reprojected into, spinning about
+a tilted axis at its own sidereal rate. Venus barely turns and turns backwards;
+Uranus rolls on its side at 98 degrees; Jupiter turns fastest of the lot. Those
+are not animation choices, they are the fact-sheet numbers.
+
+**Saturn's rings are geometry, not a decal**: a ring mesh from 66,900 km to
+136,775 km — the D ring's inner edge to the A ring's outer edge — with UVs
+remapped to run radially so the Cassini Division falls where the texture's alpha
+channel says it does, rather than being drawn in by hand.
+
+Click any body and you get a single photograph beside the map: MESSENGER on
+Mercury, Mariner 10 on Venus, Apollo 17 on Earth, Rosetta's OSIRIS on Mars,
+Hubble on Jupiter, Cassini on Saturn, Voyager 2 on Uranus and Neptune, New
+Horizons on Pluto. The Sun and the Moon are the two ground-based frames, both
+from amateur astronomers, both credited as such.
+
+The honest caveat, and the panel carries it every time: **a surface map is not a
+photograph.** It is a mosaic of many frames taken at different times, angles and
+resolutions, reprojected onto a rectangle. That is a weaker evidence claim than
+the deep-sky images below, which are single exposures, and the project does not
+blur the two. The four giant planets and Venus have no visible solid surface at all, so
+their textures are labelled `cloud-top map` rather than `surface map`.
+
+Orbital radii, body radii and the clock are all compressed to fit one display.
+Compression is uniform, so every *ratio* between bodies stays real, and every
+figure quoted in the panel is the uncompressed one. Figures: NASA planetary fact
+sheets. Licences and credits: [`CREDITS.md`](CREDITS.md).
 
 ### Deep sky — 18 real photographs, 1.1 MB
 

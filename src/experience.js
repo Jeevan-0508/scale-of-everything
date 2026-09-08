@@ -109,7 +109,7 @@ function lightCrossing(level) {
 
 function countForLevel(level, index, soe) {
   if (index === 0) return '1 planet';
-  if (index === 1) return '8 planets + the Sun';
+  if (index === 1) return '11 bodies, real surfaces';
   if (index === 2 || index === 3) {
     const radius = level.starRadiusPc;
     const meta = soe?.starMeta;

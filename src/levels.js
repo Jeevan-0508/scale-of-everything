@@ -54,17 +54,18 @@ export const LEVELS = [
   {
     id: 'solar-system',
     name: 'Solar System',
-    scaleLabel: '30 AU to Neptune',
-    logSpan: 12.7,
+    scaleLabel: '39 AU to Pluto',
+    logSpan: 12.77,
     evidence: 'measured',
     summary:
-      'Eight planets on measured orbits around one ordinary star. Neptune sits 30 astronomical units out — about 4.5 billion km.',
+      'Eight planets, the Moon and Pluto on measured orbits around one ordinary star, each wearing the surface a spacecraft mapped. Pluto sits 39 astronomical units out — about 5.9 billion km.',
     facts: [
-      'Neptune orbits at 30.07 AU',
+      'Neptune orbits at 30.07 AU, Pluto at 39.48 AU',
       'Light takes 8 minutes 20 seconds to reach Earth from the Sun',
       'The Sun holds 99.86% of the system mass',
+      'Venus and Uranus and Pluto all rotate backwards',
     ],
-    source: 'JPL Keplerian elements, J2000 epoch',
+    source: 'NASA planetary fact sheets',
   },
   {
     id: 'neighbourhood',
