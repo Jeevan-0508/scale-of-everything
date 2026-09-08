@@ -45,10 +45,18 @@ Virgo concentration in gold at centre, filaments radiating outward.
 ![Laniakea Supercluster](docs/laniakea.png)
 
 Level 9 — the Multiverse, drawn in a deliberately different visual language.
-Wireframe and violet, with our own universe in cyan. You can tell at a glance
-that the ground has changed from observation to proposal.
+Eternal inflation describes a foam of bubbles that nucleate, inflate and touch,
+so this shell is a foam: thin soap films in the hypothesis violet with our own
+universe lit cyan. Nothing solid, no surface, no detail that could be mistaken
+for an image of anything. You can tell at a glance that the ground has changed
+from observation to proposal.
 
 ![Multiverse](docs/multiverse.png)
+
+Level 1 — Earth, wearing the same measured surface, cloud and night-lights
+maps as the planet one rung out, with the Karman line to scale.
+
+![Earth](docs/earth.png)
 
 ## The ten shells
 
@@ -62,7 +70,7 @@ that the ground has changed from observation to proposal.
 | 6 | Local Group | 1.5 Mpc | measured | real galaxies |
 | 7 | Laniakea Supercluster | 80 Mpc | measured | real galaxies |
 | 8 | Observable Universe | 520 Mpc surveyed | **modelled** beyond survey depth | 17,669 real galaxies |
-| 9 | Multiverse | beyond measurement | **hypothesis** | schematic |
+| 9 | Multiverse | beyond measurement | **hypothesis** | a foam of soap-film bubbles, schematic |
 | 10 | Omniverse | undefined | **not science** | an empty box, deliberately |
 
 ## Why the Milky Way is the one galaxy that had to be faked

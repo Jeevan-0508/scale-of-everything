@@ -276,40 +276,122 @@ export function createMilkyWay(unitRadius) {
 
 // ------------------------------------------------- speculative shells
 
-// Rendered deliberately unlike every measured level: wireframe, cool violet,
-// nothing solid. A viewer should be able to tell at a glance that the ground
-// has changed from observation to proposal.
+// Eternal inflation describes a foam of bubbles that nucleate, inflate and
+// touch, so this shell is a foam: thin soap-film shells, nothing solid, no
+// surface, no detail that could be mistaken for an image of anything. It keeps
+// the hypothesis violet and ours is the one lit cyan. A film you can see
+// straight through is still plainly not a photograph, but a bubble universe
+// should at least look like a bubble.
+const BUBBLE_VERT = [
+  'varying vec3 vN;',
+  'varying vec3 vV;',
+  'void main() {',
+  '  vec4 wp = modelMatrix * vec4(position, 1.0);',
+  '  vN = normalize(mat3(modelMatrix) * normal);',
+  '  vV = normalize(cameraPosition - wp.xyz);',
+  '  gl_Position = projectionMatrix * viewMatrix * wp;',
+  '}',
+].join('\n');
+
+// The rim term is Fresnel: a soap film is nearly invisible face on and bright
+// at a grazing angle, which is what makes a bubble read as a bubble. The colour
+// walk with incidence is thin-film interference, the reason a real bubble is
+// iridescent.
+const BUBBLE_FRAG = [
+  'uniform vec3 uTint;',
+  'uniform float uBase;',
+  'uniform float uFade;',
+  'uniform float uTime;',
+  'uniform float uSeed;',
+  'varying vec3 vN;',
+  'varying vec3 vV;',
+  'void main() {',
+  '  float f = 1.0 - abs(dot(normalize(vN), normalize(vV)));',
+  '  float rim = pow(f, 3.0);',
+  '  float p = f * 6.2831 + uTime * 0.22 + uSeed;',
+  '  vec3 film = 0.5 + 0.5 * cos(p + vec3(0.0, 2.094, 4.188));',
+  '  vec3 col = mix(uTint, film, 0.4 * rim);',
+  '  float a = (0.03 + rim * 0.9) * uBase * uFade;',
+  '  gl_FragColor = vec4(col * (0.3 + rim), a);',
+  '}',
+].join('\n');
+
+// Bubbles in a foam touch. A position is drawn until it lands in contact with a
+// bubble already placed without being swallowed inside it, so the shell reads as
+// a foam rather than as scattered marbles.
+function foamPositions(R, radii) {
+  const out = [new THREE.Vector3(0, 0, 0)];
+  for (let i = 1; i < radii.length; i++) {
+    let best = null;
+    for (let attempt = 0; attempt < 240; attempt++) {
+      const u = Math.random() * 2 - 1;
+      const phi = Math.random() * Math.PI * 2;
+      const rr = R * (0.2 + Math.random() * 0.7);
+      const sxz = Math.sqrt(1 - u * u);
+      const cand = new THREE.Vector3(rr * sxz * Math.cos(phi), rr * u * 0.55,
+                                     rr * sxz * Math.sin(phi));
+      let touches = false, buried = false;
+      for (let j = 0; j < out.length; j++) {
+        const sum = radii[i] + radii[j];
+        const d = cand.distanceTo(out[j]);
+        if (d < sum) touches = true;
+        if (d < sum * 0.5) buried = true;
+      }
+      if (buried) continue;
+      if (touches) { best = cand; break; }
+      if (!best) best = cand;
+    }
+    out.push(best || new THREE.Vector3(R * 0.5, 0, 0));
+  }
+  return out;
+}
+
 export function createMultiverse(unitRadius) {
   const group = new THREE.Group();
-  const mats = [];
   const R = unitRadius;
 
+  const N = 30;
+  const radii = [];
+  for (let i = 0; i < N; i++) {
+    radii.push(R * (i === 0 ? 0.13 : 0.06 + Math.random() * 0.15));
+  }
+  const pos = foamPositions(R, radii);
+
   const bubbles = [];
-  for (let i = 0; i < 26; i++) {
-    const r = R * (0.06 + Math.random() * 0.15);
-    const geo = new THREE.IcosahedronGeometry(r, 2);
-    const mat = new THREE.MeshBasicMaterial({
-      color: i === 0 ? 0x7ef0ff : 0xa78bfa,
-      wireframe: true, transparent: true,
-      opacity: i === 0 ? 0.55 : 0.14 + Math.random() * 0.13,
+  const films = [];
+  for (let i = 0; i < N; i++) {
+    const mat = new THREE.ShaderMaterial({
+      vertexShader: BUBBLE_VERT,
+      fragmentShader: BUBBLE_FRAG,
+      uniforms: {
+        uTint: { value: new THREE.Color(i === 0 ? 0x7ef0ff : 0xa78bfa) },
+        uBase: { value: i === 0 ? 1.0 : 0.42 + Math.random() * 0.34 },
+        uFade: { value: 1 },
+        uTime: { value: 0 },
+        uSeed: { value: Math.random() * 6.2831 },
+      },
+      transparent: true,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+      blending: THREE.AdditiveBlending,
     });
-    const m = new THREE.Mesh(geo, mat);
-    const u = Math.random() * 2 - 1;
-    const phi = Math.random() * Math.PI * 2;
-    const rr = R * (0.25 + Math.random() * 0.72);
-    const s = Math.sqrt(1 - u * u);
-    if (i === 0) m.position.set(0, 0, 0);
-    else m.position.set(rr * s * Math.cos(phi), rr * u * 0.5, rr * s * Math.sin(phi));
+    const m = new THREE.Mesh(new THREE.SphereGeometry(radii[i], 48, 32), mat);
+    m.position.copy(pos[i]);
     m.userData = { kind: i === 0 ? 'our-universe' : 'bubble', index: i };
     group.add(m);
-    mats.push(mat);
-    bubbles.push({ mesh: m, spin: (Math.random() - 0.5) * 0.1 });
+    films.push(mat);
+    bubbles.push({ mesh: m, spin: (Math.random() - 0.5) * 0.06 });
   }
 
   return {
     group, bubbles,
-    update(t, dt) { bubbles.forEach((b) => { b.mesh.rotation.y += dt * b.spin; }); },
-    setOpacity: fadeable(mats),
+    update(t, dt) {
+      films.forEach((m) => { m.uniforms.uTime.value = t; });
+      bubbles.forEach((b) => { b.mesh.rotation.y += dt * b.spin; });
+    },
+    // A ShaderMaterial ignores material.opacity, so the level crossfade drives
+    // the film's own uniform instead of going through fadeable().
+    setOpacity(a) { films.forEach((m) => { m.uniforms.uFade.value = a; }); },
   };
 }
 
