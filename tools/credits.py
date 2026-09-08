@@ -33,6 +33,8 @@ L.append("|---|---|---|---|---|---|")
 for b in sol["bodies"]:
     rows=[("map",b["map_role"],b["map"]),("shot","photograph",b["shot"])]
     if "rings" in b: rows.append(("ring","ring strip",b["rings"]))
+    for name,im in (b.get("layers") or {}).items():
+        rows.append((name, name+" layer", im))
     for _,role,im in rows:
         L.append("| %s | `%s` | %s | %s | %s | [Commons](%s) |" % (
           b["name"], os.path.basename(im["src"]), role, im["licence"],

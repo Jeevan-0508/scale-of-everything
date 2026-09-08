@@ -81,6 +81,40 @@ async def main():
             ck("ring UVs run radially, not planar",
                abs(r["uv"][0] - 0.0) < 0.02 or abs(r["uv"][1] - 1.0) < 0.02, r["uv"])
 
+        # The Earth rung wears the same surface plus two extra real layers, and
+        # a shell built before its catalogue loaded used to come out plain.
+        earth = next(x for x in bodies if x["id"] == "earth")
+        ck("Earth carries cloud and night layers",
+           set((earth.get("layers") or {})) == {"clouds", "night"},
+           list(earth.get("layers") or {}))
+        shell0 = await pg.evaluate("""() => {
+          const s = window.SOE.shellAt(0); const out = [];
+          const name = t => t && t.image ? (t.image.currentSrc || '').split('/').pop() : null;
+          s.group.traverse(o => { if (o.isMesh)
+            out.push({ map: name(o.material.map), alpha: name(o.material.alphaMap) }); });
+          let grid = 0;
+          s.group.traverse(o => { if (o.isLineSegments) grid = o.geometry.attributes.position.count; });
+          return { meshes: out, grid };
+        }""")
+        maps = [m["map"] for m in shell0["meshes"] if m["map"]]
+        alphas = [m["alpha"] for m in shell0["meshes"] if m["alpha"]]
+        ck("Earth shell wears the real surface map",
+           "map-earth.webp" in maps, maps)
+        ck("Earth shell wears the cloud mask",
+           "map-earth-clouds.webp" in alphas, alphas)
+        ck("Earth graticule is parallels and meridians, not a mesh wireframe",
+           shell0["grid"] == 4352, shell0["grid"])
+
+        await pg.evaluate("window.SOE.goTo(0)")
+        await pg.wait_for_timeout(600)
+        # The rail button is what opens a level panel; runSearch('Earth') would
+        # open the planet panel one rung out instead.
+        await pg.evaluate("document.querySelector('.rung[data-index=\"0\"]').click()")
+        await pg.wait_for_timeout(500)
+        src0 = await pg.evaluate("document.getElementById('infoSource').textContent")
+        ck("Earth level panel credits all three image layers",
+           "Surface:" in src0 and "Clouds:" in src0 and "Night lights:" in src0, src0[-120:])
+
         await pg.evaluate("window.SOE.runSearch('Pluto')")
         await pg.wait_for_timeout(700)
         panel = await pg.evaluate("""() => {

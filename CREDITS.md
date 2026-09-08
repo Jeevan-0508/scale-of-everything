@@ -51,6 +51,8 @@ Surface maps were resampled to 1024 x 512 equirectangular WebP; the photographs 
 | Venus | `shot-venus.webp` | photograph | Public domain | NASA/JPL-Caltech | [Commons](https://commons.wikimedia.org/wiki/File:Venus_from_Mariner_10.jpg) |
 | Earth | `map-earth.webp` | surface map | CC BY 4.0 | Solar System Scope | [Commons](https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_earth_daymap.jpg) |
 | Earth | `shot-earth.webp` | photograph | Public domain | NASA/Apollo 17 crew; taken by either Harrison Schmitt or Ron Evans | [Commons](https://commons.wikimedia.org/wiki/File:The_Earth_seen_from_Apollo_17.jpg) |
+| Earth | `map-earth-clouds.webp` | clouds layer | CC BY 4.0 | Solar System Scope | [Commons](https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_earth_clouds.jpg) |
+| Earth | `map-earth-night.webp` | night layer | CC BY 4.0 | Solar System Scope | [Commons](https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_earth_nightmap.jpg) |
 | Moon | `map-moon.webp` | surface map | CC BY 4.0 | Solar System Scope | [Commons](https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_moon.jpg) |
 | Moon | `shot-moon.webp` | photograph | CC BY-SA 3.0 | Gregory H. Revera | [Commons](https://commons.wikimedia.org/wiki/File:FullMoon2010.jpg) |
 | Mars | `map-mars.webp` | surface map | CC BY 4.0 | Solar System Scope | [Commons](https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_mars.jpg) |

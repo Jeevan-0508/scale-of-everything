@@ -96,6 +96,11 @@ for key, name, kind, parent, au, radius_km, orbit_days, rot_hours, tilt in BODIE
     if key == "moon":
         rec["orbit_km_from_earth"] = MOON_KM_FROM_EARTH
         rec["orbit_days"] = orbit_days
+    if key == "earth":
+        # The Earth rung fills the screen with this one body, so it gets the
+        # cloud and night-lights layers the small orbital view cannot show.
+        rec["layers"] = {"clouds": img("layers", "earth-clouds", "map-"),
+                         "night": img("layers", "earth-night", "map-")}
     if key == "saturn":
         r = dict(RINGS)
         r.update(img("maps", "saturn-ring", "map-"))

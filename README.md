@@ -54,7 +54,7 @@ that the ground has changed from observation to proposal.
 
 | # | Level | Extent | Evidence | Objects drawn |
 | --- | --- | --- | --- | --- |
-| 1 | Earth | 6,371 km | measured | graticule + atmosphere to scale |
+| 1 | Earth | 6,371 km | measured | real surface, clouds, night lights, Karman line to scale |
 | 2 | Solar System | 39 AU | measured | Sun, 8 planets, the Moon, Pluto — real surfaces |
 | 3 | Stellar Neighbourhood | 25 pc | measured | real stars, catalogued positions |
 | 4 | Orion Arm | 1,000 pc | measured | 60,000 real stars |
@@ -107,6 +107,19 @@ temperature is readable off the field.
 **0.35 MB**. Converted to supergalactic cartesian coordinates — the frame
 Laniakea is defined in — so real structure reads as structure instead of
 smearing across an arbitrary axis. 150 clusters with 5 or more members.
+
+### Earth — the surface, the clouds and the lights, 1.0 MB shared with the rung above
+
+The first shell wears the same measured surface as the Earth one level out, plus
+a cloud composite and a night-lights layer. City lights are mixed in against the
+Sun direction in a world-space normal, so they appear only on the half the Sun is
+not lighting and fade across the terminator instead of glowing through daylight.
+
+The globe turns under a fixed Sun rather than carrying its daylight around with
+it, and the graticule is real parallels and meridians every 30 degrees instead of
+a wireframe of the render mesh. The Karman line at 100 km is still drawn to scale
+against the 6,371 km radius, which is the point of the rung: the entire
+atmosphere is a film 1.6 per cent of the radius thick.
 
 ### Solar System — 11 real bodies, 0.9 MB
 

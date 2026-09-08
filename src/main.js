@@ -12,7 +12,7 @@ import {
   createMultiverse, createOmniverse,
 } from './stages.js';
 import {
-  loadPlanets, createSolarSystem, planetBodies, planetMeta, planetFacts,
+  loadPlanets, createSolarSystem, planetBodies, planetById, planetMeta, planetFacts,
 } from './planets.js';
 
 // Every shell is built to the same radius in scene units. That is the whole
@@ -79,7 +79,7 @@ function buildShell(i) {
   const level = LEVELS[i];
   let built;
   switch (level.id) {
-    case 'earth':          built = createEarth(UNIT * 0.5); break;
+    case 'earth':          built = createEarth(UNIT * 0.5, planetById('earth')); break;
     case 'solar-system':   built = createSolarSystem(UNIT); break;
     case 'neighbourhood':  built = buildStars(25, UNIT, { magCuts: [4.0, 8.0] }); break;
     case 'orion-arm':      built = buildStars(1000, UNIT, { magCuts: [2.5, 5.5] }); break;
@@ -243,8 +243,22 @@ function showLevelInfo(i) {
   }
   infoBody.innerHTML = '<span class="ev-tag ' + level.evidence + '">' + ev.label + '</span><br>' + level.summary;
   setFacts(facts);
-  infoSource.innerHTML = '<strong>' + ev.blurb + '</strong><br>Source: ' + level.source;
+  infoSource.innerHTML = '<strong>' + ev.blurb + '</strong><br>Source: ' + level.source +
+    (level.id === 'earth' ? earthImageCredit() : '');
   infoPanel.classList.remove('hidden');
+}
+
+// The Earth shell wears three real image layers and none of them appear in a
+// planet panel, so the level panel is where they have to be credited.
+function earthImageCredit() {
+  const e = planetById('earth');
+  if (!e) return '';
+  const rows = [['Surface', e.map]];
+  if (e.layers && e.layers.clouds) rows.push(['Clouds', e.layers.clouds]);
+  if (e.layers && e.layers.night) rows.push(['Night lights', e.layers.night]);
+  return rows.map(([label, im]) =>
+    '<br>' + label + ': ' + im.credit + ' &mdash; <a href="' + im.page +
+    '" target="_blank" rel="noopener">' + im.licence + '</a>').join('');
 }
 
 function showPlanetInfo(b) {
@@ -581,6 +595,7 @@ async function boot() {
 
   setLoad(76, 'building the first shells…');
   shellAt(0); shellAt(1);
+  startLoop();
 
   setLoad(86, 'indexing everything with a name…');
   buildSearchIndex();
@@ -678,7 +693,16 @@ function animate() {
   composer.render();
   requestAnimationFrame(animate);
 }
-animate();
+
+// Not started at module scope: the first frame calls shellAt(0), and a shell
+// built before its catalogue has loaded comes out empty. boot() starts it.
+let looping = false;
+function startLoop() {
+  if (looping) return;
+  looping = true;
+  clock.start();
+  animate();
+}
 
 export { LEVELS, planetBodies };
 

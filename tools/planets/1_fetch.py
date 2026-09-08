@@ -28,6 +28,14 @@ MAPS = {
 }
 RING = ("saturn-ring", "File:Solarsystemscope texture 2k saturn ring alpha.png")
 
+# Extra layers for the Earth rung, where the globe fills the screen and a single
+# flat day map is not what Earth looks like. Both are real: the cloud layer is a
+# satellite composite, the night layer is city lights from orbital night imagery.
+LAYERS = {
+    "earth-clouds": "File:Solarsystemscope texture 2k earth clouds.jpg",
+    "earth-night":  "File:Solarsystemscope texture 2k earth nightmap.jpg",
+}
+
 SHOTS = {
     "sun":     "File:The Sun in white light.jpg",
     "mercury": "File:Mercury in true color.jpg",
@@ -80,12 +88,13 @@ def grab(url):
         urllib.request.Request(url, headers=UA), timeout=240).read()
 
 
-info = lookup(list(MAPS.values()) + [RING[1]], MAP_W)
+info = lookup(list(MAPS.values()) + [RING[1]] + list(LAYERS.values()), MAP_W)
 info.update(lookup(SHOTS.values(), SHOT_MAX))
 
 os.makedirs(HERE + "/out/maps", exist_ok=True)
 os.makedirs(HERE + "/out/shots", exist_ok=True)
-manifest = {"maps": {}, "shots": {}}
+os.makedirs(HERE + "/out/layers", exist_ok=True)
+manifest = {"maps": {}, "shots": {}, "layers": {}}
 
 
 def record(section, key, title, path, im):
@@ -117,6 +126,22 @@ im = im.resize((1024, 32), Image.LANCZOS)
 p = HERE + "/out/maps/saturn-ring.webp"
 im.save(p, "WEBP", quality=88, method=6, lossless=False)
 record("maps", RING[0], RING[1], p, im)
+
+# The cloud layer is the composite's own luminance kept as greyscale and used
+# as an alpha mask on white. Stored without an alpha channel on purpose: a soft
+# alpha gradient costs 380 KB in WebP where the same data as grey costs 30.
+# Nothing is invented that the composite does not contain.
+im = Image.open(io.BytesIO(grab(info[LAYERS["earth-clouds"]]["thumb"]))).convert("L")
+im = im.resize((MAP_W, MAP_W // 2), Image.LANCZOS).convert("RGB")
+p = HERE + "/out/layers/earth-clouds.webp"
+im.save(p, "WEBP", quality=72, method=6)
+record("layers", "earth-clouds", LAYERS["earth-clouds"], p, im)
+
+im = Image.open(io.BytesIO(grab(info[LAYERS["earth-night"]]["thumb"]))).convert("RGB")
+im = im.resize((MAP_W, MAP_W // 2), Image.LANCZOS)
+p = HERE + "/out/layers/earth-night.webp"
+im.save(p, "WEBP", quality=80, method=6)
+record("layers", "earth-night", LAYERS["earth-night"], p, im)
 
 for key, title in SHOTS.items():
     im = Image.open(io.BytesIO(grab(info[title]["thumb"]))).convert("RGB")

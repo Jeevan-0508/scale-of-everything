@@ -51,52 +51,149 @@ export function createBackdrop() {
 // fabricated data in a project whose entire point is that its numbers check
 // out, so this level shows a graticule and the atmosphere at true relative
 // thickness instead: 100 km of Karman line against 6,371 km of radius.
-export function createEarth(unitRadius) {
+// A graticule of real parallels and meridians rather than a wireframe of the
+// render mesh, which reads as scattered debris once there is a surface under it.
+function graticule(R, stepDeg) {
+  const pts = [];
+  const seg = 128;
+  for (let lat = -90 + stepDeg; lat < 90; lat += stepDeg) {
+    const phi = (lat * Math.PI) / 180;
+    const r = R * Math.cos(phi), y = R * Math.sin(phi);
+    for (let i = 0; i < seg; i++) {
+      const a = (i / seg) * Math.PI * 2, b = ((i + 1) / seg) * Math.PI * 2;
+      pts.push(new THREE.Vector3(Math.cos(a) * r, y, Math.sin(a) * r));
+      pts.push(new THREE.Vector3(Math.cos(b) * r, y, Math.sin(b) * r));
+    }
+  }
+  for (let lon = 0; lon < 360; lon += stepDeg) {
+    const th = (lon * Math.PI) / 180;
+    for (let i = 0; i < seg; i++) {
+      const a = -Math.PI / 2 + (i / seg) * Math.PI;
+      const b = -Math.PI / 2 + ((i + 1) / seg) * Math.PI;
+      pts.push(new THREE.Vector3(Math.cos(a) * Math.cos(th) * R, Math.sin(a) * R,
+                                 Math.cos(a) * Math.sin(th) * R));
+      pts.push(new THREE.Vector3(Math.cos(b) * Math.cos(th) * R, Math.sin(b) * R,
+                                 Math.cos(b) * Math.sin(th) * R));
+    }
+  }
+  return new THREE.BufferGeometry().setFromPoints(pts);
+}
+
+// City lights belong only on the half the Sun is not lighting. Three's standard
+// material applies emissive everywhere, so the night map is mixed in against the
+// sun direction and faded across the terminator instead of glowing through
+// daylight. Nothing is invented: the layer is real night imagery.
+function addNightLights(material, nightTex, sunDir) {
+  material.onBeforeCompile = (shader) => {
+    shader.uniforms.nightMap = { value: nightTex };
+    shader.uniforms.sunDir = { value: sunDir };
+    // Both the normal and the UV are carried across in varyings of our own.
+    // The stock vNormal is in view space, so it would drift with the camera,
+    // and the stock UV varying has been renamed across three releases — vUv in
+    // r151, vMapUv since r152 — so relying on either name is a trap.
+    shader.vertexShader = shader.vertexShader
+      .replace('#include <common>',
+        '#include <common>\nvarying vec3 soeWN;\nvarying vec2 soeUv;')
+      .replace('#include <begin_vertex>',
+        '#include <begin_vertex>\nsoeWN = normalize(mat3(modelMatrix) * normal);\n' +
+        'soeUv = uv;');
+    shader.fragmentShader = shader.fragmentShader
+      .replace('#include <common>',
+        '#include <common>\nvarying vec3 soeWN;\nvarying vec2 soeUv;\n' +
+        'uniform sampler2D nightMap;\nuniform vec3 sunDir;')
+      .replace('#include <emissivemap_fragment>',
+        '#include <emissivemap_fragment>\n' +
+        'float soeLit = dot(normalize(soeWN), normalize(sunDir));\n' +
+        'float soeNight = smoothstep(0.12, -0.18, soeLit);\n' +
+        'totalEmissiveRadiance += texture2D(nightMap, soeUv).rgb * soeNight * 1.6;');
+  };
+  material.customProgramCacheKey = () => 'soe-night';
+}
+
+// tex is the Earth record from data/planets.json when it has loaded, so this
+// rung wears the same measured surface as the planet one level out. Without it
+// the shell still builds, just plain.
+export function createEarth(unitRadius, tex) {
   const group = new THREE.Group();
   const R = unitRadius;
 
-  const globe = new THREE.Mesh(
-    new THREE.SphereGeometry(R, 64, 48),
-    new THREE.MeshStandardMaterial({
+  const sunDir = new THREE.Vector3(3, 1.4, 2).normalize();
+  const loader = new THREE.TextureLoader();
+  const load = (src) => {
+    const t = loader.load(src);
+    t.colorSpace = THREE.SRGBColorSpace;
+    t.anisotropy = 8;
+    return t;
+  };
+  // A mask carries data, not colour, so it must not go through sRGB decoding.
+  const loadMask = (src) => {
+    const t = loader.load(src);
+    t.colorSpace = THREE.NoColorSpace;
+    t.anisotropy = 8;
+    return t;
+  };
+
+  const globeMat = tex
+    ? new THREE.MeshStandardMaterial({
+      map: load(tex.map.src), roughness: 0.82, metalness: 0.04,
+      transparent: true, opacity: 1,
+    })
+    : new THREE.MeshStandardMaterial({
       color: 0x18406e, emissive: 0x081a33, emissiveIntensity: 0.9,
       roughness: 0.85, metalness: 0.1, transparent: true, opacity: 1,
-    })
-  );
-  group.add(globe);
+    });
+  if (tex && tex.layers && tex.layers.night) {
+    addNightLights(globeMat, load(tex.layers.night.src), sunDir);
+  }
+  const spin = new THREE.Group();
+  group.add(spin);
+  const globe = new THREE.Mesh(new THREE.SphereGeometry(R, 96, 64), globeMat);
+  spin.add(globe);
+
+  const mats = [globeMat];
+
+  if (tex && tex.layers && tex.layers.clouds) {
+    // The cloud composite ships as greyscale and is used as an alpha mask on
+    // white, so the clouds are lit by the same Sun as the surface below them.
+    const cloudMat = new THREE.MeshStandardMaterial({
+      color: 0xffffff, alphaMap: loadMask(tex.layers.clouds.src),
+      transparent: true, opacity: 0.78,
+      roughness: 1, metalness: 0, depthWrite: false,
+    });
+    const clouds = new THREE.Mesh(new THREE.SphereGeometry(R * 1.006, 72, 48), cloudMat);
+    spin.add(clouds);
+    mats.push(cloudMat);
+  }
 
   const grid = new THREE.LineSegments(
-    new THREE.WireframeGeometry(new THREE.SphereGeometry(R * 1.002, 24, 16)),
-    new THREE.LineBasicMaterial({ color: 0x5fa8e0, transparent: true, opacity: 0.22 })
+    graticule(R * 1.0015, 30),
+    new THREE.LineBasicMaterial({ color: 0x9fd4ff, transparent: true, opacity: 0.13 })
   );
-  group.add(grid);
+  spin.add(grid);
+  mats.push(grid.material);
 
   // Karman line at 100 km, to scale against the 6,371 km radius.
   const air = new THREE.Mesh(
     new THREE.SphereGeometry(R * (1 + 100 / 6371), 48, 32),
     new THREE.MeshBasicMaterial({
-      color: 0x64b7ff, transparent: true, opacity: 0.16,
+      color: 0x64b7ff, transparent: true, opacity: 0.13,
       side: THREE.BackSide, blending: THREE.AdditiveBlending, depthWrite: false,
     })
   );
   group.add(air);
+  mats.push(air.material);
 
-  const halo = new THREE.Mesh(
-    new THREE.SphereGeometry(R * 1.16, 40, 28),
-    new THREE.MeshBasicMaterial({
-      color: 0x3d86d6, transparent: true, opacity: 0.07,
-      side: THREE.BackSide, blending: THREE.AdditiveBlending, depthWrite: false,
-    })
-  );
-  group.add(halo);
+  // No decorative halo: an additive shell has a hard silhouette edge, which read
+  // as a flat blue disc once a real surface sat inside it. The Karman line above
+  // is the only atmosphere here, and it is to scale.
 
-  const sun = new THREE.DirectionalLight(0xfff4e0, 2.1);
-  sun.position.set(3, 1.4, 2).multiplyScalar(R);
+  const sun = new THREE.DirectionalLight(0xfff4e0, 2.4);
+  sun.position.copy(sunDir).multiplyScalar(R * 4);
   group.add(sun);
 
-  const mats = [globe.material, grid.material, air.material, halo.material];
   return {
     group,
-    update(t) { group.rotation.y = t * 0.05; },
+    update(t) { spin.rotation.y = t * 0.05; },
     setOpacity: fadeable(mats),
   };
 }

@@ -278,5 +278,31 @@
    "artist": "NASA/Johns Hopkins University Applied Physics Laboratory/Southwest Research Institute/Alex Parker",
    "credit": "http://pluto.jhuapl.edu/Galleries/Featured-Images/image.php?page=1&gallery_id=2&image_id=543"
   }
+ },
+ "layers": {
+  "earth-clouds": {
+   "file": "earth-clouds.webp",
+   "w": 1024,
+   "h": 512,
+   "bytes": 132252,
+   "commons": "File:Solarsystemscope texture 2k earth clouds.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_earth_clouds.jpg",
+   "lic": "CC BY 4.0",
+   "licurl": "https://creativecommons.org/licenses/by/4.0",
+   "artist": "Solar System Scope",
+   "credit": "http://solarsystemscope.com/textures"
+  },
+  "earth-night": {
+   "file": "earth-night.webp",
+   "w": 1024,
+   "h": 512,
+   "bytes": 20018,
+   "commons": "File:Solarsystemscope texture 2k earth nightmap.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_earth_nightmap.jpg",
+   "lic": "CC BY 4.0",
+   "licurl": "https://creativecommons.org/licenses/by/4.0",
+   "artist": "Solar System Scope",
+   "credit": "http://solarsystemscope.com/textures"
+  }
  }
 }

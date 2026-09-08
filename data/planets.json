@@ -125,7 +125,27 @@
    },
    "parent": "Sun",
    "au": 1.0,
-   "orbit_days": 365.26
+   "orbit_days": 365.26,
+   "layers": {
+    "clouds": {
+     "src": "assets/planets/map-earth-clouds.webp",
+     "w": 1024,
+     "h": 512,
+     "credit": "Solar System Scope",
+     "licence": "CC BY 4.0",
+     "licence_url": "https://creativecommons.org/licenses/by/4.0",
+     "page": "https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_earth_clouds.jpg"
+    },
+    "night": {
+     "src": "assets/planets/map-earth-night.webp",
+     "w": 1024,
+     "h": 512,
+     "credit": "Solar System Scope",
+     "licence": "CC BY 4.0",
+     "licence_url": "https://creativecommons.org/licenses/by/4.0",
+     "page": "https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_2k_earth_nightmap.jpg"
+    }
+   }
   },
   {
    "id": "moon",
