@@ -1,6 +1,7 @@
-import asyncio, sys
+import asyncio, os, sys
 from playwright.async_api import async_playwright
-CHROME = r"C:/Users/jeekumak/AppData/Local/ms-playwright/chromium-1243/chrome-win64/chrome.exe"
+# Playwright's own bundled Chromium by default; set SOE_CHROME to override.
+CHROME = os.environ.get("SOE_CHROME") or None
 URL = "http://127.0.0.1:8080/"
 fails = []
 
@@ -59,7 +60,10 @@ async def run(vw, vh, mob, tag, shot):
         else:   await pg.click("#cxLaunch", timeout=8000)
         await asyncio.sleep(1.6)
         check(await pg.evaluate("!document.getElementById('cosmicExplorer')"), "hero dismissed on enter")
-        op = await pg.evaluate("getComputedStyle(document.getElementById('cxInstrument')).opacity")
+        op = await pg.evaluate("""() => {
+          for (const a of document.getAnimations()) { try { a.finish(); } catch (e) {} }
+          return getComputedStyle(document.getElementById('cxInstrument')).opacity;
+        }""")
         check(float(op) > 0.9, "instrument actually opens (opacity %s)" % op)
 
         hits = await pg.evaluate(OVERLAP, ["cosmicDock","zoomHint","readout","cxTimeline",
@@ -126,9 +130,12 @@ async def run(vw, vh, mob, tag, shot):
         await b.close()
 
 async def main():
-    await run(1440, 900, False, "DESKTOP 1440x900", r"C:/Users/jeekumak/.aki/tmp/soe/fix-desk.png")
-    await run(390, 844, True, "MOBILE 390x844", r"C:/Users/jeekumak/.aki/tmp/soe/fix-mob.png")
+    await run(1440, 900, False, "DESKTOP 1440x900", "layout-desktop.png")
+    await run(390, 844, True, "MOBILE 390x844", "layout-mobile.png")
     print("\n%d failure(s)" % len(fails))
     for f in fails: print("  -", f)
+    # Without this the suite reported success while printing failures, which is
+    # worse than having no suite at all.
+    sys.exit(1 if fails else 0)
 
 asyncio.run(main())

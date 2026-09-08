@@ -14,15 +14,10 @@ function el(tag, id, className, html = '') {
 }
 
 function installCinematic() {
-  if (document.getElementById('cinematicIntro')) return;
-  const intro = el('div', 'cinematicIntro', '', `
-    <div class="ci-core">
-      <div class="ci-kicker">An interactive map of scale</div>
-      <h1 class="ci-title">Scale of <em>Everything</em></h1>
-      <p class="ci-sub">From the place beneath your feet to structures beyond direct measurement. Every boundary is labelled by what we actually know.</p>
-      <div class="ci-scale"><span class="ci-from">1.7 m</span><span class="ci-arrow">→</span><span class="ci-to">the edge of the map</span></div>
-      <div class="ci-enter">Scroll to begin · drag to look around</div>
-    </div>`);
+  if (document.getElementById('scaleSpine')) return;
+  // The opening title card used to live here as a second full-screen layer on
+  // top of the Cosmic Explorer hero. Two openings fought for the same screen, so
+  // its content moved into that one hero and this layer is gone.
   const spine = el('div', 'scaleSpine');
   spine.appendChild(el('div', 'scaleSpineFill'));
   const order = el('div', 'scaleOrder');
@@ -36,7 +31,7 @@ function installCinematic() {
   const landmark = el('div', 'landmarkCard', '', '<div class="lc-eyebrow">Now entering</div><div class="lc-text"></div>');
   const flash = el('div', 'scaleFlash', '', '<div class="sf-inner"><div class="sf-kicker">Changing scale</div><div class="sf-power"></div></div>');
   const here = el('div', 'youAreHere', '', '<span class="yah-label">You are here</span>');
-  document.body.append(intro, spine, legend, landmark, flash, here);
+  document.body.append(spine, legend, landmark, flash, here);
 
   const rungs = [...document.querySelectorAll('#ladder .rung')];
   const fill = document.getElementById('scaleSpineFill');
@@ -44,12 +39,6 @@ function installCinematic() {
   const landmarkText = landmark.querySelector('.lc-text');
   let last = -1;
   let landmarkTimer = 0;
-  const dismissIntro = () => intro.classList.add('dismissed');
-  if (prefersReduced) intro.classList.add('dismissed');
-  else {
-    setTimeout(dismissIntro, 4300);
-    ['wheel', 'pointerdown', 'keydown', 'touchstart'].forEach((event) => addEventListener(event, dismissIntro, { once: true, passive: true }));
-  }
   function currentIndex() {
     const active = document.querySelector('#ladder .rung.active');
     return active ? Number(active.dataset.index) : 0;

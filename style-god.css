@@ -9,19 +9,8 @@
   --god-glass: rgba(3, 8, 20, .58);
 }
 
-/* Cinematic opening */
-#cinematicIntro {
-  position: fixed; inset: 0; z-index: 100;
-  display: grid; place-items: center;
-  background:
-    radial-gradient(circle at 50% 48%, rgba(40, 82, 150, .16), transparent 24%),
-    radial-gradient(circle at 50% 50%, rgba(3, 8, 20, .2), rgba(1, 3, 10, .98) 72%);
-  pointer-events: none;
-  opacity: 1;
-  transition: opacity 1.2s cubic-bezier(.2,.7,.2,1), visibility 1.2s;
-}
-#cinematicIntro.dismissed { opacity: 0; visibility: hidden; }
-.ci-core { width: min(760px, 88vw); text-align: center; }
+/* Opening typography. These rules used to dress a second full-screen intro of
+   their own; that layer is gone and the Cosmic Explorer hero wears them now. */
 .ci-kicker {
   margin-bottom: 1rem; color: rgba(190, 215, 255, .62);
   font-size: .62rem; letter-spacing: .42em; text-transform: uppercase;
@@ -48,11 +37,6 @@
 .ci-scale::before, .ci-scale::after { content: ''; width: min(16vw, 120px); height: 1px; background: var(--god-line); }
 .ci-from, .ci-to { font-size: .66rem; letter-spacing: .12em; text-transform: uppercase; }
 .ci-arrow { color: var(--god-cyan); font-size: 1rem; }
-.ci-enter {
-  margin-top: 3rem; font-size: .62rem; letter-spacing: .3em;
-  text-transform: uppercase; color: rgba(232,238,252,.46);
-  animation: ciPulse 2s 1.2s infinite;
-}
 
 /* Atmospheric framing */
 #scene::after { content: ''; }
@@ -159,6 +143,6 @@ body::after {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #cinematicIntro, #readout, #landmarkCard { transition-duration: .01ms; }
-  .ci-kicker, .ci-title, .ci-sub, .ci-scale, .ci-enter, #readout.evolving #readoutName, #readout.evolving #readoutScale { animation: none; }
+  #readout, #landmarkCard { transition-duration: .01ms; }
+  .ci-kicker, .ci-title, .ci-sub, .ci-scale, #readout.evolving #readoutName, #readout.evolving #readoutScale { animation: none; }
 }
