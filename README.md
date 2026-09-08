@@ -108,6 +108,52 @@ temperature is readable off the field.
 Laniakea is defined in — so real structure reads as structure instead of
 smearing across an arbitrary axis. 150 clusters with 5 or more members.
 
+### Deep sky — 18 real photographs, 1.1 MB
+
+Eighteen nebulae, star clusters and galaxies that a point cloud cannot show you:
+the **Pillars of Creation**, the **Cat's Eye**, **Orion**, the **Crab**, the
+**Helix**, the **Horsehead**, **Carina**, the **Veil**, the **Lagoon**, the
+**Trifid**, the **Ring**, the **Dumbbell**, the **North America Nebula**, the
+**Tarantula**, the **Pleiades**, **Omega Centauri**, the **Sombrero** and the
+**Whirlpool**.
+
+Each one is the image a telescope actually took — Hubble, JWST, ESO, NOIRLab —
+under a free licence, downscaled to 760 px, WebP, with a soft edge fade baked
+into the alpha channel so a rectangular photograph does not read as a rectangle
+against the sky. **Nothing here is a render.** Full table of files, licences and
+credits: [`CREDITS.md`](CREDITS.md).
+
+Positions are SIMBAD `basic` (ICRS J2000) and apparent sizes are SIMBAD
+`galdim`, both queried through the SIMBAD TAP service. Where SIMBAD carries no
+size, the field is **omitted rather than guessed** — five objects have no
+apparent size shown for exactly that reason.
+
+Distances are the part worth reading. Every object records the *method* that
+produced its distance alongside the number, because these are not all the same
+kind of measurement:
+
+- **Gaia parallax** of a central star or of the ionising cluster — the Ring,
+  Helix, Dumbbell, Cat's Eye, Pleiades, Omega Centauri, Trifid, Eagle, Carina
+- **VLBA trigonometric parallax** — Orion, 414 ± 7 pc (Menten et al. 2007)
+- **Supernova-remnant expansion** — the Crab, ~2 kpc (Trimble 1973)
+- **Three-dimensional dust mapping** — the North America Nebula (Zucker et al. 2020)
+- **Inherited from a host or parent cloud** — the Tarantula from the LMC, the
+  Horsehead from Orion B
+- **Cosmicflows-3**, the catalogue this project already ships — Sombrero and Whirlpool
+
+Where that method has a caveat, the caveat is shown in the panel next to the
+number rather than buried: a single central-star parallax at 1.4 kpc is not the
+same claim as a cluster mean, and the Pillars' parallax belongs to the cluster
+lighting them, not to the dust.
+
+The Whirlpool is anchored to the CF3 row for **NGC 5195**, its interacting
+companion, because — as documented below — M51 itself has no individual CF3
+distance. That is stated in the panel, not papered over.
+
+Each rung shows only the objects that fall inside its own radius, assigned by
+comparing published distance against shell radius rather than by hand: eight on
+the Orion Arm, seven on the Milky Way, one on the Local Volume, two on Laniakea.
+
 ### Two data problems worth documenting
 
 **Nothing was searchable.** CF3 designations have inconsistent zero-padding:

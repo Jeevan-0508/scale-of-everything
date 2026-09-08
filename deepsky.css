@@ -1,0 +1,48 @@
+/* Deep-sky layer: the hover name in the scene, and the photograph inside the
+ * info panel. Open and closed states are both written with #id so the open
+ * state can never lose the cascade to the closed one. */
+
+#hoverLabel {
+  position: fixed;
+  z-index: 22;
+  transform: translate(-50%, calc(-100% - 14px));
+  padding: 0.3rem 0.6rem;
+  border: 1px solid rgba(120, 190, 255, 0.45);
+  border-radius: 999px;
+  background-color: rgba(6, 12, 24, 0.82);
+  color: #dcefff;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.16s ease;
+}
+
+#hoverLabel.show { opacity: 1; }
+
+.ds-shot {
+  display: block;
+  width: 100%;
+  max-height: 190px;
+  object-fit: cover;
+  margin: 0.7rem 0 0.6rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(120, 190, 255, 0.22);
+  background-color: #04070e;
+}
+
+.ds-caveat {
+  margin: 0.5rem 0 0;
+  padding-left: 0.6rem;
+  border-left: 2px solid #fbbf24;
+  color: #e4c98a;
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 760px) {
+  .ds-shot { max-height: 130px; }
+  #hoverLabel { font-size: 0.66rem; }
+}

@@ -2,3 +2,4 @@ __pycache__/
 *.pyc
 hyg.csv
 cf3.tsv
+tools/deepsky/out/

@@ -6,6 +6,7 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 
 import { LEVELS, EVIDENCE } from './levels.js';
 import { loadCatalogs, buildStars, buildGalaxies, starMeta, galaxyMeta } from './catalog.js';
+import { loadDeepSky, attachDeepSky, deepSkyObjects, deepSkyFacts } from './deepsky.js';
 import {
   createBackdrop, createEarth, createSolarSystem, createMilkyWay,
   createMultiverse, createOmniverse, PLANETS,
@@ -87,6 +88,10 @@ function buildShell(i) {
     case 'omniverse':      built = createOmniverse(UNIT); break;
     default: throw new Error('no builder for level ' + level.id);
   }
+  // Real deep-sky photographs live inside the shell they belong to, so they
+  // inherit its fade, scale and visibility instead of needing their own.
+  attachDeepSky(built, i, UNIT);
+
   built.group.visible = false;
   scene.add(built.group);
   shells[i] = built;
@@ -305,6 +310,25 @@ function showClusterInfo(c) {
   infoPanel.classList.remove('hidden');
 }
 
+function showDeepSkyInfo(o) {
+  infoKind.textContent = o.type.replace(/^./, (c) => c.toUpperCase());
+  infoTitle.textContent = o.name;
+  infoBody.innerHTML =
+    '<span class="ev-tag measured">measured</span>' +
+    '<img class="ds-shot" src="' + o.image + '" alt="Telescope image of ' + o.name + '" loading="lazy">' +
+    '<p>' + o.blurb + '</p>' +
+    (o.caveat ? '<p class="ds-caveat">' + o.caveat + '</p>' : '');
+  setFacts(deepSkyFacts(o));
+  infoSource.innerHTML =
+    '<strong>The image is real telescope data, not a render. The marker in the scene is a fixed size, ' +
+    'not the true angular size &mdash; drawn to scale the Cat\u2019s Eye would be under one pixel.</strong><br>' +
+    'Distance: ' + o.dist_ref + '<br>' +
+    'Position: ' + o.coord_source + '<br>' +
+    'Image: ' + o.image_credit + ' &mdash; <a href="' + o.image_page + '" target="_blank" rel="noopener">' +
+    o.image_licence + '</a>';
+  infoPanel.classList.remove('hidden');
+}
+
 closeInfo.addEventListener('click', () => infoPanel.classList.add('hidden'));
 
 // -------------------------------------------------------------------- search
@@ -344,6 +368,15 @@ function buildSearchIndex() {
              c.members + ' member galaxies of measured distance.',
     });
   });
+  deepSkyObjects().forEach((o) => {
+    searchIndex.push({
+      kind: 'deepsky', label: o.name,
+      aliases: [o.name].concat(o.desig.split(/\s*[/,]\s*/)).concat([o.type, o.constellation]),
+      level: o.level, row: null, payload: o,
+      blurb: o.name + ' is a ' + o.type + ' in ' + o.constellation + ', ' +
+             Math.round(o.dist_ly).toLocaleString() + ' light years away. ' + o.blurb,
+    });
+  });
   LEVELS.forEach((l, i) => {
     searchIndex.push({
       kind: 'level', label: l.name, aliases: [l.name, l.id.replace(/-/g, ' ')],
@@ -379,7 +412,14 @@ function focusEntry(entry) {
   if (entry.kind === 'star') showStarInfo(entry.payload);
   else if (entry.kind === 'galaxy') showGalaxyInfo(entry.payload);
   else if (entry.kind === 'cluster') showClusterInfo(entry.payload);
+  else if (entry.kind === 'deepsky') showDeepSkyInfo(entry.payload);
   else showLevelInfo(entry.level);
+
+  if (entry.kind === 'deepsky') {
+    const shell = shellAt(entry.level);
+    const hit = (shell.deepSky || []).find((e) => e.obj.id === entry.payload.id);
+    if (hit) { pendingTarget = hit.sprite.position.clone(); controls.autoRotate = false; }
+  }
 
   if (entry.row != null) {
     // The shell must exist before its row index can be resolved to a position.
@@ -436,28 +476,64 @@ function pickables() {
   return [];
 }
 
+// Planets are unit-scaled meshes, deep-sky sprites are not, so the emphasis is
+// a multiple of whatever each object's own size is rather than a flat 1.45.
+function emphasise(obj, k) {
+  const b = obj.userData && obj.userData.baseScale;
+  if (b) obj.scale.set(b.x * k, b.y * k, b.z * k);
+  else obj.scale.setScalar(k);
+}
+
 function pickHover() {
   const list = pickables();
   if (!list.length) {
-    if (hovered) { hovered.scale.setScalar(1); hovered = null; canvas.style.cursor = 'default'; }
+    if (hovered) { emphasise(hovered, 1); hovered = null; canvas.style.cursor = 'default'; hideLabel(); }
     return;
   }
   raycaster.setFromCamera(pointer, camera);
   const hits = raycaster.intersectObjects(list, false);
   const obj = hits.length ? hits[0].object : null;
   if (obj !== hovered) {
-    if (hovered) hovered.scale.setScalar(1);
+    if (hovered) emphasise(hovered, 1);
     hovered = obj;
-    if (hovered) hovered.scale.setScalar(1.45);
+    if (hovered) emphasise(hovered, 1.45);
     canvas.style.cursor = hovered ? 'pointer' : 'default';
+    if (hovered && hovered.userData.kind === 'deepsky') showLabel(hovered.userData.obj.name);
+    else hideLabel();
   }
+  if (hovered && labelEl.classList.contains('show')) placeLabel(hovered);
+}
+
+// A hover name, because an unlabelled photograph floating in the dark tells you
+// there is something there but not what.
+const labelEl = document.getElementById('hoverLabel');
+function showLabel(text) { labelEl.textContent = text; labelEl.classList.add('show'); }
+function hideLabel() { labelEl.classList.remove('show'); }
+function placeLabel(obj) {
+  const v = obj.position.clone().project(camera);
+  labelEl.style.left = ((v.x * 0.5 + 0.5) * innerWidth) + 'px';
+  labelEl.style.top = ((-v.y * 0.5 + 0.5) * innerHeight) + 'px';
 }
 
 canvas.addEventListener('click', () => {
   if (!hovered) return;
   const d = hovered.userData;
   if (d.kind === 'planet') showPlanetInfo(d.planet);
+  else if (d.kind === 'deepsky') {
+    showDeepSkyInfo(d.obj);
+    pendingTarget = hovered.position.clone();
+    controls.autoRotate = false;
+    if (navigator.vibrate) navigator.vibrate(12);
+  }
 });
+
+// Touch has no hover, so a tap has to do the picking itself before it can act.
+canvas.addEventListener('pointerdown', (e) => {
+  if (e.pointerType !== 'touch' || touches.size > 1) return;
+  pointer.x = (e.clientX / innerWidth) * 2 - 1;
+  pointer.y = -(e.clientY / innerHeight) * 2 + 1;
+  pickHover();
+}, { passive: true });
 
 // -------------------------------------------------------------------- boot
 
@@ -470,7 +546,10 @@ async function boot() {
   setLoad(12, 'reading the catalogues…');
   await loadCatalogs((frac, label) => setLoad(12 + frac * 55, label));
 
-  setLoad(72, 'building the first shells…');
+  setLoad(70, 'reading the deep-sky pack…');
+  await loadDeepSky();
+
+  setLoad(76, 'building the first shells…');
   shellAt(0); shellAt(1);
 
   setLoad(86, 'indexing everything with a name…');
@@ -486,7 +565,7 @@ async function boot() {
 
   window.SOE = {
     scene, camera, controls, LEVELS, shells, searchIndex,
-    starMeta: starMeta(), galaxyMeta: galaxyMeta(),
+    starMeta: starMeta(), galaxyMeta: galaxyMeta(), deepSky: deepSkyObjects(),
     goTo, runSearch, get pos() { return pos; }, get targetPos() { return targetPos; },
     shellAt,
   };

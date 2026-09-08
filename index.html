@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="style-god.css" />
 <link rel="stylesheet" href="observatory.css" />
 <link rel="stylesheet" href="cosmic-explorer.css" />
+<link rel="stylesheet" href="deepsky.css" />
 <link rel="stylesheet" href="layout.css" />
 <script type="importmap">
 {
@@ -28,6 +29,7 @@
 <header id="hud"><div class="brand"><span class="brand-mark"></span><div><div class="brand-name">Scale of Everything</div><div class="brand-sub">ten shells, from 6,371 km to the edge of the map</div></div></div><div class="hud-actions"><input id="searchInput" type="search" placeholder="Find a star, galaxy or cluster…" autocomplete="off" /><button id="chatToggle" type="button">Ask the universe</button></div></header>
 <nav id="ladder" aria-label="scale levels"></nav>
 <div id="readout"><div id="readoutName">Earth</div><div id="readoutScale">6,371 km</div><div id="readoutEvidence"><span class="pill"></span><span class="pill-label"></span></div></div>
+<div id="hoverLabel" aria-hidden="true"></div>
 <div id="zoomHint">scroll, or drag the ladder — <kbd>&uarr;</kbd><kbd>&darr;</kbd> also work</div>
 <section id="infoPanel" class="hidden"><button id="closeInfo" type="button" aria-label="close">&times;</button><div id="infoKind"></div><h2 id="infoTitle"></h2><p id="infoBody"></p><ul id="infoFacts"></ul><div id="infoSource"></div></section>
 <section id="chatPanel" class="hidden"><header id="chatHeader"><span>Ask the universe</span><button id="chatClose" type="button" aria-label="close chat">&times;</button></header><div id="chatMessages"></div><div id="chatStatus"></div><form id="chatForm"><input id="chatInput" type="text" placeholder="Ask about anything on this ladder…" autocomplete="off" disabled /><button id="chatSend" type="submit" disabled>Send</button></form></section>
